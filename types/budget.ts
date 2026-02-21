@@ -11,7 +11,18 @@ export interface Budget {
   updatedAt: Date;
 }
 
-export type BudgetResponse = Omit<Budget, "userId">;
+export interface TransactionForBudget {
+  id: string;
+  type: string;
+  amount: number;
+  description: string | null;
+  transactionDate: Date;
+  createdAt: Date;
+}
+
+export interface BudgetResponse extends Omit<Budget, "userId"> {
+  transactions: TransactionForBudget[];
+}
 
 export interface BudgetRequest {
   title: string;

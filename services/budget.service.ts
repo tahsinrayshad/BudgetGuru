@@ -30,10 +30,28 @@ function validateBudgetData(data: BudgetRequest | BudgetUpdateRequest): string |
   return null;
 }
 
-// Helper function to format budget response (exclude userId)
-function formatBudgetResponse(budget: any): Omit<Budget, "userId"> {
+// Helper function to format budget response (exclude userId and include transactions)
+async function formatBudgetResponse(budget: any): Promise<BudgetResponse> {
   const { userId, ...budgetWithoutUserId } = budget;
-  return budgetWithoutUserId;
+  
+  // Fetch transactions for this budget
+  const transactions = await prisma.transaction.findMany({
+    where: { budgetId: budget.id },
+    select: {
+      id: true,
+      type: true,
+      amount: true,
+      description: true,
+      transactionDate: true,
+      createdAt: true,
+    },
+    orderBy: { transactionDate: "desc" },
+  });
+
+  return {
+    ...budgetWithoutUserId,
+    transactions,
+  };
 }
 
 export async function createBudget(
@@ -62,7 +80,7 @@ export async function createBudget(
     return {
       success: true,
       message: "Budget created successfully",
-      budget: formatBudgetResponse(budget),
+      budget: await formatBudgetResponse(budget),
     };
   } catch (error) {
     return {
@@ -115,7 +133,7 @@ export async function updateBudget(
     return {
       success: true,
       message: "Budget updated successfully",
-      budget: formatBudgetResponse(updatedBudget),
+      budget: await formatBudgetResponse(updatedBudget),
     };
   } catch (error) {
     return {
@@ -180,7 +198,7 @@ export async function getBudgetById(
     return {
       success: true,
       message: "Budget fetched successfully",
-      budget: formatBudgetResponse(budget),
+      budget: await formatBudgetResponse(budget),
     };
   } catch (error) {
     return {
@@ -202,7 +220,7 @@ export async function getAllBudgetsByUser(
     return {
       success: true,
       message: "Budgets fetched successfully",
-      budgets: budgets.map(formatBudgetResponse),
+      budgets: await Promise.all(budgets.map(formatBudgetResponse)),
     };
   } catch (error) {
     return {
