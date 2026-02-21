@@ -23,6 +23,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   budgets   Budget[]
+  loans     Loan[]
+  transactions Transaction[]
 }
 
 model Budget {
@@ -37,6 +39,53 @@ model Budget {
   status      String   @default("active")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  transactions Transaction[]
 
   @@index([userId])
+}
+
+enum LoanType {
+  BORROWED
+  LENT
+}
+
+model Loan {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        LoanType
+  amount      Float
+  description String?
+  deadline    DateTime
+  isPaid      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  transactions Transaction[]
+
+  @@index([userId])
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  LOAN
+}
+
+model Transaction {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type            TransactionType
+  amount          Float
+  description     String?
+  transactionDate DateTime
+  budgetId        String?
+  budget          Budget?  @relation(fields: [budgetId], references: [id], onDelete: SetNull)
+  loanId          String?
+  loan            Loan?    @relation(fields: [loanId], references: [id], onDelete: SetNull)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([budgetId])
+  @@index([loanId])
 }
