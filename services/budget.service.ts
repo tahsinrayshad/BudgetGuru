@@ -4,6 +4,8 @@ import {
   BudgetRequest,
   BudgetUpdateRequest,
   BudgetResponse,
+  BudgetPerformance,
+  BudgetPerformanceResponse,
 } from "@/types/budget";
 
 // Helper function to validate budget data
@@ -42,6 +44,7 @@ async function formatBudgetResponse(budget: any): Promise<BudgetResponse> {
       type: true,
       amount: true,
       description: true,
+      category: true,
       transactionDate: true,
       createdAt: true,
     },
@@ -226,6 +229,96 @@ export async function getAllBudgetsByUser(
     return {
       success: false,
       message: error instanceof Error ? error.message : "Failed to fetch budgets",
+    };
+  }
+}
+
+export async function getBudgetPerformance(
+  budgetId: string,
+  userId: string
+): Promise<BudgetPerformanceResponse> {
+  try {
+    // Verify budget exists and belongs to user
+    const budget = await prisma.budget.findUnique({
+      where: { id: budgetId },
+    });
+
+    if (!budget) {
+      return { success: false, message: "Budget not found", budgetId: "", title: "", performance: {} as BudgetPerformance };
+    }
+
+    if (budget.userId !== userId) {
+      return { success: false, message: "Unauthorized to access this budget", budgetId: "", title: "", performance: {} as BudgetPerformance };
+    }
+
+    // Get transactions for this budget within the budget date range
+    const transactions = await prisma.transaction.findMany({
+      where: {
+        budgetId,
+        userId,
+        transactionDate: {
+          gte: budget.startDate,
+          lte: budget.endDate,
+        },
+      },
+    });
+
+    // Calculate actual spending (sum of EXPENSE type transactions)
+    const actualSpending = transactions
+      .filter((t) => t.type === "EXPENSE")
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const budgetedAmount = budget.amount;
+    const remaining = budgetedAmount - actualSpending;
+    const percentageUsed = (actualSpending / budgetedAmount) * 100;
+
+    // Determine status based on percentage used
+    let status: "on-track" | "warning" | "over-budget";
+    if (percentageUsed > 100) {
+      status = "over-budget";
+    } else if (percentageUsed >= 80) {
+      status = "warning";
+    } else {
+      status = "on-track";
+    }
+
+    // Format the period string
+    const startDate = budget.startDate.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+    const endDate = budget.endDate.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+    const period = `${startDate} to ${endDate}`;
+
+    const performance: BudgetPerformance = {
+      budgetedAmount,
+      actualSpending,
+      remaining,
+      percentageUsed: Math.round(percentageUsed * 100) / 100,
+      status,
+      transactionCount: transactions.filter((t) => t.type === "EXPENSE").length,
+      period,
+    };
+
+    return {
+      success: true,
+      message: "Budget performance retrieved successfully",
+      budgetId,
+      title: budget.title,
+      performance,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Failed to fetch budget performance",
+      budgetId: "",
+      title: "",
+      performance: {} as BudgetPerformance,
     };
   }
 }

@@ -77,6 +77,7 @@ model Transaction {
   type            TransactionType
   amount          Float
   description     String?
+  category        String   @default("General")
   transactionDate DateTime
   budgetId        String?
   budget          Budget?  @relation(fields: [budgetId], references: [id], onDelete: SetNull)

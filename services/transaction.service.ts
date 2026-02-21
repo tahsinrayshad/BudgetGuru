@@ -79,6 +79,7 @@ export async function createTransaction(
         type: data.type,
         amount: data.amount,
         description: data.description || null,
+        category: data.category || "General",
         transactionDate: new Date(data.transactionDate),
         budgetId: data.budgetId || null,
         loanId: data.loanId || null,
@@ -144,6 +145,7 @@ export async function updateTransaction(
     if (data.type !== undefined) updateData.type = data.type;
     if (data.amount !== undefined) updateData.amount = data.amount;
     if (data.description !== undefined) updateData.description = data.description;
+    if (data.category !== undefined) updateData.category = data.category;
     if (data.transactionDate !== undefined) updateData.transactionDate = new Date(data.transactionDate);
     if (data.budgetId !== undefined) updateData.budgetId = data.budgetId;
     if (data.loanId !== undefined) updateData.loanId = data.loanId;

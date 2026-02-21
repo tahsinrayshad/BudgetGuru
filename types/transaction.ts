@@ -6,6 +6,7 @@ export interface Transaction {
   type: TransactionType;
   amount: number;
   description: string | null;
+  category: string;
   transactionDate: Date;
   budgetId: string | null;
   loanId: string | null;
@@ -19,6 +20,7 @@ export interface TransactionRequest {
   type: TransactionType;
   amount: number;
   description?: string;
+  category?: string;
   transactionDate: string; // ISO date string
   budgetId?: string;
   loanId?: string;
@@ -28,6 +30,7 @@ export interface TransactionUpdateRequest {
   type?: TransactionType;
   amount?: number;
   description?: string;
+  category?: string;
   transactionDate?: string;
   budgetId?: string;
   loanId?: string;

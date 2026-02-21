@@ -20,6 +20,7 @@ export interface TransactionForLoan {
     type: string;
     amount: number;
     description: string | null;
+    category: string;
     transactionDate: Date;
     createdAt: Date;
 }

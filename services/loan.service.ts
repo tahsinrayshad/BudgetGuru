@@ -40,6 +40,7 @@ async function formatLoanResponse(loan: any): Promise<LoanResponse> {
       type: true,
       amount: true,
       description: true,
+      category: true,
       transactionDate: true,
       createdAt: true,
     },

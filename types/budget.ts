@@ -16,6 +16,7 @@ export interface TransactionForBudget {
   type: string;
   amount: number;
   description: string | null;
+  category: string;
   transactionDate: Date;
   createdAt: Date;
 }
@@ -40,6 +41,24 @@ export interface BudgetUpdateRequest {
   startDate?: string;
   endDate?: string;
   status?: "active" | "completed" | "cancelled";
+}
+
+export interface BudgetPerformance {
+  budgetedAmount: number;
+  actualSpending: number;
+  remaining: number;
+  percentageUsed: number;
+  status: "on-track" | "warning" | "over-budget";
+  transactionCount: number;
+  period: string;
+}
+
+export interface BudgetPerformanceResponse {
+  success: boolean;
+  message: string;
+  budgetId: string;
+  title: string;
+  performance: BudgetPerformance;
 }
 
 export interface BudgetApiResponse {
