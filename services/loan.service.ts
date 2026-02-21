@@ -28,10 +28,28 @@ function validateLoanData(data: LoanRequest | LoanUpdateRequest): string | null 
   return null;
 }
 
-// Helper function to format loan response (exclude userId)
-function formatLoanResponse(loan: any): Omit<Loan, "userId"> {
+// Helper function to format loan response (exclude userId and include transactions)
+async function formatLoanResponse(loan: any): Promise<LoanResponse> {
   const { userId, ...loanWithoutUserId } = loan;
-  return loanWithoutUserId;
+  
+  // Fetch transactions for this loan
+  const transactions = await prisma.transaction.findMany({
+    where: { loanId: loan.id },
+    select: {
+      id: true,
+      type: true,
+      amount: true,
+      description: true,
+      transactionDate: true,
+      createdAt: true,
+    },
+    orderBy: { transactionDate: "desc" },
+  });
+
+  return {
+    ...loanWithoutUserId,
+    transactions,
+  };
 }
 
 export async function createLoan(
@@ -60,7 +78,7 @@ export async function createLoan(
     return {
       success: true,
       message: "Loan created successfully",
-      loan: formatLoanResponse(loan),
+      loan: await formatLoanResponse(loan),
     };
   } catch (error) {
     return {
@@ -112,7 +130,7 @@ export async function updateLoan(
     return {
       success: true,
       message: "Loan updated successfully",
-      loan: formatLoanResponse(updatedLoan),
+      loan: await formatLoanResponse(updatedLoan),
     };
   } catch (error) {
     return {
@@ -177,7 +195,7 @@ export async function getLoanById(
     return {
       success: true,
       message: "Loan fetched successfully",
-      loan: formatLoanResponse(loan),
+      loan: await formatLoanResponse(loan),
     };
   } catch (error) {
     return {
@@ -199,7 +217,7 @@ export async function getAllLoansByUser(
     return {
       success: true,
       message: "Loans fetched successfully",
-      loans: loans.map(formatLoanResponse),
+      loans: await Promise.all(loans.map(formatLoanResponse)),
     };
   } catch (error) {
     return {

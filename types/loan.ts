@@ -15,7 +15,18 @@ export interface Loan {
     updatedAt: Date;
 }
 
-export type LoanResponse = Omit<Loan, "userId">;
+export interface TransactionForLoan {
+    id: string;
+    type: string;
+    amount: number;
+    description: string | null;
+    transactionDate: Date;
+    createdAt: Date;
+}
+
+export interface LoanResponse extends Omit<Loan, "userId"> {
+    transactions: TransactionForLoan[];
+}
 
 export interface LoanRequest {
     type: LoanType;
