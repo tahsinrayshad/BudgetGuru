@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
+import { authUtils } from "@/lib/auth-client";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -48,6 +49,11 @@ export default function Login() {
         throw new Error(data.message || "Login failed");
       }
 
+      // Store the token in localStorage
+      if (data.token) {
+        authUtils.setToken(data.token);
+      }
+
       toast.success("Login successful! Redirecting to dashboard...");
       // Reset form
       setFormData({
@@ -72,7 +78,7 @@ export default function Login() {
         {/* Logo */}
         <div className="flex justify-center mb-4">
           <Image
-            src="/writing.png"
+            src="/budgetguru.png"
             alt="BudgetGuru logo"
             width={240}
             height={240}

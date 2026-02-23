@@ -80,7 +80,7 @@ export default function Home() {
         {/* Logo */}
         <div className="flex justify-center mb-4">
           <Image
-            src="/writing.png"
+            src="/budgetguru.png"
             alt="BudgetGuru logo"
             width={240}
             height={240}

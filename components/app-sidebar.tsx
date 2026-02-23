@@ -1,5 +1,7 @@
 "use client"
 
+import Image from "next/image"
+import { useEffect, useState } from "react"
 import {
   LayoutDashboard,
   ArrowLeftRight,
@@ -20,6 +22,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
+  SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -31,6 +35,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { authUtils } from "@/lib/auth-client"
 
 const navItems = [
   { title: "Dashboard", icon: LayoutDashboard, id: "dashboard" },
@@ -50,11 +55,54 @@ interface AppSidebarProps {
 export function AppSidebar({
   activeTab,
   onTabChange,
-  userName = "Jordan Davis",
-  userEmail = "jordan@example.com",
-  userInitials = "JD",
+  userName: propUserName,
+  userEmail: propUserEmail,
+  userInitials: propUserInitials,
 }: AppSidebarProps) {
   const router = useRouter()
+  const { isOpen } = useSidebar()
+  const [userName, setUserName] = useState<string | null>(null)
+  const [userEmail, setUserEmail] = useState<string | null>(null)
+  const [userInitials, setUserInitials] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        // Debug: Check if token exists
+        const token = authUtils.getToken()
+        
+        const result = await authUtils.getCurrentUser()
+        
+        if (result.success && result.user) {
+          setUserName(result.user.name)
+          setUserEmail(result.user.email)
+          
+          // Generate initials from name
+          const displayName = result.user.name || result.user.email || ""
+          const initials = displayName
+            .split(" ")
+            .map((word: string) => word[0])
+            .join("")
+            .toUpperCase()
+            .slice(0, 2)
+          setUserInitials(initials || "")
+        } else {
+          console.warn("Failed to fetch user:", result.message)
+          // Redirect to login if no token
+          if (result.message === "No token found") {
+            router.push("/")
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch user info:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchUserInfo()
+  }, [])
 
   const handleLogout = async () => {
     try {
@@ -72,27 +120,18 @@ export function AppSidebar({
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="p-4">
-        <div className="flex items-center gap-3">
-          <div
-            className="flex size-8 shrink-0 items-center justify-center rounded-lg"
-            style={{ backgroundColor: "var(--mauve-bark)" }}
-          >
-            <Wallet className="size-4 text-white" />
-          </div>
-          <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-            <span className="text-sm font-semibold text-white tracking-tight">
-              BudgetGuru
-            </span>
-            <span className="text-xs text-gray-100">Dashboard</span>
-          </div>
+        <div className={cn("flex items-center w-full", isOpen ? "justify-between" : "justify-center")}>
+          {isOpen && (
+            <Image src="/BudgetGurux_logo.png" alt="BudgetGuru" width={160} height={160} />
+          )}
+          <SidebarTrigger className="h-8 w-8 p-1 flex-shrink-0" />
         </div>
       </SidebarHeader>
-
       <SidebarSeparator />
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel className={!isOpen ? "hidden" : ""}>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => (
@@ -113,7 +152,7 @@ export function AppSidebar({
                         activeTab === item.id && "text-primary"
                       )}
                     />
-                    <span>{item.title}</span>
+                    <span className={!isOpen ? "hidden" : ""}>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -126,48 +165,61 @@ export function AppSidebar({
         <SidebarSeparator />
         <SidebarMenu>
           <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton size="lg" tooltip="Profile">
-                  <Avatar className="size-7">
-                    <AvatarImage
-                      src="https://api.dicebear.com/9.x/notionists/svg?seed=Jordan"
-                      alt="User avatar"
-                    />
-                    <AvatarFallback
-                      style={{
-                        backgroundColor: "var(--almond-cream)",
-                        color: "var(--mauve-bark)",
-                      }}
-                      className="text-xs font-semibold"
-                    >
-                      {userInitials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                    <span className="text-sm font-medium text-white">
-                      {userName}
-                    </span>
-                    <span className="text-xs text-gray-100">
-                      {userEmail}
-                    </span>
-                  </div>
-                  <ChevronUp className="ml-auto size-4 text-gray-100 group-data-[collapsible=icon]:hidden" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent side="top" align="start" className="w-56">
-                <DropdownMenuItem>Profile Settings</DropdownMenuItem>
-                <DropdownMenuItem>Notifications</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={handleLogout}
-                  className="text-destructive focus:text-destructive cursor-pointer"
+            {userName && userEmail ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton size="lg" tooltip="Profile">
+                    <Avatar className="size-7">
+                      <AvatarImage
+                        src={`https://api.dicebear.com/9.x/notionists/svg?seed=${userName}`}
+                        alt="User avatar"
+                      />
+                      <AvatarFallback
+                        style={{
+                          backgroundColor: "var(--almond-cream)",
+                          color: "var(--mauve-bark)",
+                        }}
+                        className="text-xs font-semibold"
+                      >
+                        {userInitials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className={cn("flex flex-col", !isOpen && "hidden")}>
+                      <span className="text-sm font-medium text-white">
+                        {userName}
+                      </span>
+                      <span className="text-xs text-gray-100">
+                        {userEmail}
+                      </span>
+                    </div>
+                    <ChevronUp className={cn("ml-auto size-4 text-gray-100", !isOpen && "hidden")} />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent 
+                  side="top" 
+                  align="start" 
+                  className="w-56 bg-amber-50"
+                  style={{
+                    borderColor: "#fffbeb",
+                  }}
                 >
-                  <LogOut className="mr-2 size-4" />
-                  Log Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <DropdownMenuItem className="text-gray-700 hover:bg-opacity-75">Profile Settings</DropdownMenuItem>
+                  <DropdownMenuItem className="text-gray-700 hover:bg-opacity-75">Notifications</DropdownMenuItem>
+                  <DropdownMenuSeparator style={{ backgroundColor: "#f3e8d8" }} />
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                    className="text-gray-700 hover:bg-opacity-75 cursor-pointer"
+                  >
+                    <LogOut className="mr-2 size-4" />
+                    Log Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <SidebarMenuButton disabled className="cursor-not-allowed opacity-50">
+                <span className="text-sm text-gray-500">Loading...</span>
+              </SidebarMenuButton>
+            )}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

@@ -1,30 +1,59 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
-import { ChevronLeft } from "lucide-react"
+import { ChevronLeft, Menu } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+
+// Create a context for sidebar state
+const SidebarContext = React.createContext<{
+  isOpen: boolean
+  setIsOpen: (open: boolean) => void
+} | null>(null)
+
+export const useSidebar = () => {
+  const context = React.useContext(SidebarContext)
+  if (!context) {
+    throw new Error("useSidebar must be used within SidebarProvider")
+  }
+  return context
+}
+
+export const SidebarProvider = ({ children }: { children: React.ReactNode }) => {
+  const [isOpen, setIsOpen] = React.useState(true)
+  return (
+    <SidebarContext.Provider value={{ isOpen, setIsOpen }}>
+      <div className="flex h-screen" data-sidebar-open={isOpen}>
+        {children}
+      </div>
+    </SidebarContext.Provider>
+  )
+}
 
 const Sidebar = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & {
     collapsible?: "icon" | "none"
   }
->(({ className, collapsible = "none", ...props }, ref) => (
-  <div
-    ref={ref}
-    data-collapsible={collapsible}
-    className={cn(
-      "flex h-full w-64 flex-col transition-all duration-300",
-      collapsible === "icon" && "group-data-[collapsible=icon]:w-16",
-      className
-    )}
-    style={{ 
-      backgroundColor: "#a78a7f",
-      borderRight: "1px solid #a78a7f"
-    }}
-    {...props}
-  />
-))
+>(({ className, collapsible = "none", ...props }, ref) => {
+  const { isOpen } = useSidebar()
+  
+  return (
+    <div
+      ref={ref}
+      data-collapsible={collapsible}
+      className={cn(
+        "flex h-full flex-col transition-all duration-300",
+        collapsible === "icon" && !isOpen ? "w-20" : "w-64",
+        className
+      )}
+      style={{ 
+        backgroundColor: "#a78a7f",
+        borderRight: "1px solid #a78a7f"
+      }}
+      {...props}
+    />
+  )
+})
 Sidebar.displayName = "Sidebar"
 
 const SidebarHeader = React.forwardRef<
@@ -153,6 +182,32 @@ const SidebarMenuButton = React.forwardRef<
 ))
 SidebarMenuButton.displayName = "SidebarMenuButton"
 
+const SidebarTrigger = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, ...props }, ref) => {
+  const { isOpen, setIsOpen } = useSidebar()
+
+  return (
+    <button
+      ref={ref}
+      onClick={() => setIsOpen(!isOpen)}
+      className={cn(
+        "inline-flex items-center justify-center rounded-md text-white hover:opacity-90 transition-opacity",
+        className
+      )}
+      {...props}
+    >
+      {isOpen ? (
+        <ChevronLeft className="size-5" />
+      ) : (
+        <Menu className="size-5" />
+      )}
+    </button>
+  )
+})
+SidebarTrigger.displayName = "SidebarTrigger"
+
 export {
   Sidebar,
   SidebarHeader,
@@ -165,4 +220,5 @@ export {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarTrigger,
 }
