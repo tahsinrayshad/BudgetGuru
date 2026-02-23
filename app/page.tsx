@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -13,8 +14,6 @@ export default function Home() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,8 +25,6 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
     setIsLoading(true);
 
     try {
@@ -56,7 +53,7 @@ export default function Home() {
         throw new Error(data.message || "Registration failed");
       }
 
-      setSuccess("Account created successfully! Redirecting to login...");
+      toast.success("Account created successfully! Redirecting to login...");
       // Reset form
       setFormData({
         name: "",
@@ -71,7 +68,7 @@ export default function Home() {
         window.location.href = "/login";
       }, 2000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      toast.error(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -95,20 +92,6 @@ export default function Home() {
         <p className="text-center text-gray-600 mb-8">
           Create your account to get started
         </p>
-
-        {/* Error Message */}
-        {error && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-md mb-4">
-            <p className="text-red-700 text-sm">{error}</p>
-          </div>
-        )}
-
-        {/* Success Message */}
-        {success && (
-          <div className="p-4 bg-green-50 border border-green-200 rounded-md mb-4">
-            <p className="text-green-700 text-sm">{success}</p>
-          </div>
-        )}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">

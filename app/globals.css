@@ -31,3 +31,29 @@ body {
   color: var(--foreground);
   font-family: "Poppins", sans-serif;
 }
+
+/* Sonner Toast Customization */
+[data-sonner-toast][data-type="success"],
+.sonner-toast[data-type="success"] {
+  background-color: #D8F4D4 !important;
+  color: #118802 !important;
+  border-color: #118802 !important;
+}
+
+[data-sonner-toast][data-type="error"],
+.sonner-toast[data-type="error"] {
+  background-color: #F4D4D4 !important;
+  color: #F45D5D !important;
+  border-color: #F45D5D !important;
+}
+
+/* Alternative selectors for Sonner */
+[data-type="success"] {
+  background-color: #D8F4D4 !important;
+  color: #8CE77F !important;
+}
+
+[data-type="error"] {
+  background-color: #F4D4D4 !important;
+  color: #F45D5D !important;
+}

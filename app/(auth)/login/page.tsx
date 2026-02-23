@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -10,8 +11,6 @@ export default function Login() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -23,8 +22,6 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
     setIsLoading(true);
 
     try {
@@ -51,7 +48,7 @@ export default function Login() {
         throw new Error(data.message || "Login failed");
       }
 
-      setSuccess("Login successful! Redirecting to dashboard...");
+      toast.success("Login successful! Redirecting to dashboard...");
       // Reset form
       setFormData({
         email: "",
@@ -63,7 +60,7 @@ export default function Login() {
         window.location.href = "/dashboard";
       }, 2000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      toast.error(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -87,20 +84,6 @@ export default function Login() {
         <p className="text-center text-gray-600 mb-8">
           Sign in to your account
         </p>
-
-        {/* Error Message */}
-        {error && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-md mb-4">
-            <p className="text-red-700 text-sm">{error}</p>
-          </div>
-        )}
-
-        {/* Success Message */}
-        {success && (
-          <div className="p-4 bg-green-50 border border-green-200 rounded-md mb-4">
-            <p className="text-green-700 text-sm">{success}</p>
-          </div>
-        )}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
