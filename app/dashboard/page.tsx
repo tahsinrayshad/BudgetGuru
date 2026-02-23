@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { DashboardContent } from "@/components/dashboard-content"
+import { TransactionsContent } from "@/components/transactions-content"
 import { SidebarProvider } from "@/components/ui/sidebar"
 
 export default function Dashboard() {
@@ -40,11 +41,7 @@ export default function Dashboard() {
 
             {/* Content based on active tab */}
             {activeTab === "dashboard" && <DashboardContent />}
-          {activeTab === "transactions" && (
-            <div className="bg-amber-50 rounded-lg p-8 text-center text-gray-600">
-              Transactions content coming soon...
-            </div>
-          )}
+            {activeTab === "transactions" && <TransactionsContent />}
           {activeTab === "budgets" && (
             <div className="bg-amber-50 rounded-lg p-8 text-center text-gray-600">
               Budgets content coming soon...

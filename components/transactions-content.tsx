@@ -1,0 +1,348 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { ArrowDownLeft, ArrowUpRight, Search, Filter, Plus } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { authUtils } from "@/lib/auth-client"
+import { API_CONFIG } from "@/lib/api-config"
+
+interface ApiTransaction {
+  id: string
+  type: "INCOME" | "EXPENSE" | "LOAN"
+  amount: number
+  description: string
+  category: string
+  transactionDate: string
+  budgetId?: string | null
+  loanId?: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+interface Transaction {
+  id: string
+  description: string
+  category: string
+  amount: number
+  type: "income" | "expense" | "loan"
+  date: string
+  status: "Completed" | "Pending"
+}
+
+const categories = ["All", "General", "Income", "Housing", "Food", "Utilities", "Transport", "Entertainment"]
+
+export function TransactionsContent() {
+  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("All")
+  const [showCategoryFilter, setShowCategoryFilter] = useState(false)
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        setIsLoading(true)
+        const token = authUtils.getToken()
+
+        if (!token) {
+          throw new Error("No token found. Please login first.")
+        }
+
+        const response = await fetch(API_CONFIG.getFullUrl(API_CONFIG.ENDPOINTS.TRANSACTIONS), {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        })
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to fetch transactions")
+        }
+
+        // Transform API data to component format
+        const transformedTransactions: Transaction[] = data.transactions.map(
+          (tx: ApiTransaction) => ({
+            id: tx.id,
+            description: tx.description,
+            category: tx.category,
+            amount: tx.type === "EXPENSE" || tx.type === "LOAN" ? -tx.amount : tx.amount,
+            type: tx.type.toLowerCase() as "income" | "expense" | "loan",
+            date: new Date(tx.transactionDate).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            }),
+            status: "Completed",
+          })
+        )
+
+        setTransactions(transformedTransactions)
+        setError(null)
+      } catch (err) {
+        console.error("Failed to fetch transactions:", err)
+        setError(err instanceof Error ? err.message : "Failed to fetch transactions")
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchTransactions()
+  }, [])
+
+  const filteredTransactions = transactions.filter((tx) => {
+    const matchesSearch =
+      tx.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      tx.category.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategory = selectedCategory === "All" || tx.category === selectedCategory
+    return matchesSearch && matchesCategory
+  })
+
+  // Calculate totals from filtered transactions
+  const totalInflow = filteredTransactions
+    .filter((tx) => tx.type === "income")
+    .reduce((sum, tx) => sum + tx.amount, 0)
+
+  const totalOutflow = Math.abs(
+    filteredTransactions
+      .filter((tx) => tx.type === "expense" || tx.type === "loan")
+      .reduce((sum, tx) => sum + tx.amount, 0)
+  )
+
+  const netBalance = totalInflow - totalOutflow
+
+  return (
+    <div className="flex flex-col gap-6">
+      {/* Summary row */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium" style={{ color: "var(--dusty-mauve)" }}>
+              Total Inflow
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <div className="flex size-8 items-center justify-center rounded-full" style={{ backgroundColor: "var(--dusty-mauve)" }}>
+                <ArrowDownLeft className="size-4" style={{ color: "#FFFFFF" }} />
+              </div>
+              <span className="text-2xl font-bold" style={{ color: "var(--deep-mocha)" }}>
+                ${totalInflow.toFixed(2)}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium" style={{ color: "var(--mauve-shadow)" }}>
+              Total Outflow
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <div className="flex size-8 items-center justify-center rounded-full" style={{ backgroundColor: "var(--mauve-shadow)" }}>
+                <ArrowUpRight className="size-4" style={{ color: "#FFFFFF" }} />
+              </div>
+              <span className="text-2xl font-bold" style={{ color: "var(--deep-mocha)" }}>
+                ${totalOutflow.toFixed(2)}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium" style={{ color: "var(--dusty-mauve)" }}>
+              Net Balance
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <span className="text-2xl font-bold" style={{ color: "var(--dusty-mauve)" }}>
+              {netBalance >= 0 ? "+" : ""}{netBalance.toFixed(2)}
+            </span>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Transactions Table */}
+      <Card>
+        <CardHeader>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <CardTitle className="text-base" style={{ color: "var(--deep-mocha)" }}>
+                Recent Transactions
+              </CardTitle>
+              <CardDescription>All account activity</CardDescription>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2" style={{ color: "var(--dusty-mauve)" }} />
+                <Input 
+                  placeholder="Search transactions..." 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-9 h-9 w-64" 
+                  style={{ 
+                    borderColor: "var(--pastel-petal)",
+                    backgroundColor: "#FFFFFF",
+                    outline: "none",
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.boxShadow = `0 0 0 2px var(--dusty-mauve)`
+                    e.currentTarget.style.border = "1px solid var(--dusty-mauve)"
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.boxShadow = "none"
+                    e.currentTarget.style.border = "1px solid var(--pastel-petal)"
+                  }}
+                />
+              </div>
+              <div className="relative">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-9"
+                  onClick={() => setShowCategoryFilter(!showCategoryFilter)}
+                  style={{ 
+                    borderColor: "var(--dusty-mauve)", 
+                    color: "var(--dusty-mauve)",
+                    backgroundColor: "#FFFFFF"
+                  }}
+                >
+                  <Filter className="size-4 mr-1.5" />
+                  Filter
+                </Button>
+                {showCategoryFilter && (
+                  <div 
+                    className="absolute top-full right-0 mt-1 bg-white rounded-md shadow-lg border p-2 z-10 min-w-max"
+                    style={{ borderColor: "var(--pastel-petal)" }}
+                  >
+                    {categories.map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => {
+                          setSelectedCategory(cat)
+                          setShowCategoryFilter(false)
+                        }}
+                        className="block w-full text-left px-3 py-1.5 text-sm rounded hover:opacity-75 transition"
+                        style={{
+                          color: selectedCategory === cat ? "#FFFFFF" : "var(--coffee-bean)",
+                          backgroundColor: selectedCategory === cat ? "var(--dusty-mauve)" : "transparent"
+                        }}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <Button 
+                size="sm" 
+                className="h-9"
+                style={{ 
+                  backgroundColor: "var(--dusty-mauve)",
+                  color: "#FFFFFF",
+                  border: "none"
+                }}
+              >
+                <Plus className="size-4 mr-1.5" />
+                Add Transaction
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <div className="text-center py-6" style={{ color: "var(--dusty-mauve)" }}>
+              Loading transactions...
+            </div>
+          ) : error ? (
+            <div className="text-center py-6" style={{ color: "var(--mauve-shadow)" }}>
+              {error}
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow className="hover:bg-transparent" style={{ borderColor: "var(--pastel-petal)" }}>
+                  <TableHead style={{ color: "var(--deep-mocha)" }}>Date</TableHead>
+                  <TableHead style={{ color: "var(--deep-mocha)" }}>Description</TableHead>
+                  <TableHead style={{ color: "var(--deep-mocha)" }}>Category</TableHead>
+                  <TableHead className="text-right" style={{ color: "var(--deep-mocha)" }}>Amount</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredTransactions.length > 0 ? (
+                  filteredTransactions.map((tx) => (
+                    <TableRow key={tx.id} style={{ borderColor: "var(--pastel-petal)" }}>
+                      <TableCell className="font-medium" style={{ color: "var(--coffee-bean)" }}>
+                        {tx.date}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="flex size-8 shrink-0 items-center justify-center rounded-full"
+                            style={{
+                              backgroundColor: tx.type === "income" ? "var(--dusty-mauve)" : "var(--mauve-shadow)"
+                            }}
+                          >
+                            {tx.type === "income" ? (
+                              <ArrowDownLeft className="size-4" style={{ color: "#FFFFFF" }} />
+                            ) : (
+                              <ArrowUpRight className="size-4" style={{ color: "#FFFFFF" }} />
+                            )}
+                          </div>
+                          <span className="font-medium" style={{ color: "var(--coffee-bean)" }}>
+                            {tx.description}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge 
+                          variant="secondary"
+                          className="font-normal"
+                          style={{
+                            backgroundColor: "var(--pastel-petal)",
+                            color: "var(--coffee-bean)",
+                            border: "1px solid var(--dusty-mauve)"
+                          }}
+                        >
+                          {tx.category}
+                        </Badge>
+                      </TableCell>
+                      <TableCell 
+                        className="text-right font-medium"
+                        style={{
+                          color: tx.type === "income" ? "var(--dusty-mauve)" : "var(--mauve-shadow)"
+                        }}
+                      >
+                        {tx.type === "income" ? "+" : "-"}${Math.abs(tx.amount).toFixed(2)}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center py-6" style={{ color: "var(--dusty-mauve)" }}>
+                      No transactions found
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
