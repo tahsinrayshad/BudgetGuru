@@ -47,8 +47,8 @@ const Sidebar = React.forwardRef<
         className
       )}
       style={{ 
-        backgroundColor: "#a78a7f",
-        borderRight: "1px solid #a78a7f"
+        backgroundColor: "#402a2c",
+        borderRight: "1px solid #402a2c"
       }}
       {...props}
     />
@@ -175,7 +175,7 @@ const SidebarMenuButton = React.forwardRef<
       size === "lg" && "h-12 px-2",
       className
     )}
-    style={isActive ? { backgroundColor: "#735751" } : { color: "rgba(255, 255, 255, 0.8)" }}
+    style={isActive ? { backgroundColor: "#703d57" } : { color: "rgba(255, 255, 255, 0.8)" }}
     title={tooltip}
     {...props}
   />
