@@ -158,7 +158,7 @@ export default function Login() {
         <p className="text-center mt-6" style={{ color: "var(--steel-blue)" }}>
           Don't have an account?{" "}
           <a
-            href="/"
+            href="/register"
             className="font-semibold"
             style={{ color: "var(--stormy-teal)" }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "var(--charcoal-blue)")}

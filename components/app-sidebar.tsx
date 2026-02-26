@@ -110,10 +110,15 @@ export function AppSidebar({
         method: "POST",
       })
       if (response.ok) {
+        // Remove token from localStorage
+        authUtils.removeToken()
         router.push("/")
       }
     } catch (error) {
       console.error("Logout failed:", error)
+      // Still remove token even if API call fails
+      authUtils.removeToken()
+      router.push("/")
     }
   }
 

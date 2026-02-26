@@ -1,13 +1,58 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
 import { DashboardContent } from "@/components/dashboard-content"
 import { TransactionsContent } from "@/components/transactions-content"
 import { SidebarProvider } from "@/components/ui/sidebar"
+import { authUtils } from "@/lib/auth-client"
 
 export default function Dashboard() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState("dashboard")
+  const [isAuthorized, setIsAuthorized] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const token = authUtils.getToken()
+        
+        if (!token) {
+          router.replace("/")
+          return
+        }
+
+        // Verify token is still valid by fetching current user
+        const result = await authUtils.getCurrentUser()
+        
+        if (!result.success || !result.user) {
+          authUtils.removeToken()
+          router.replace("/")
+          return
+        }
+
+        setIsAuthorized(true)
+      } catch (error) {
+        console.error("Auth check failed:", error)
+        router.replace("/")
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    checkAuth()
+  }, [router])
+
+  // Don't render anything until we've verified authentication
+  if (isLoading) {
+    return null
+  }
+
+  if (!isAuthorized) {
+    return null
+  }
 
   return (
     <SidebarProvider>
