@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ArrowDownLeft, ArrowUpRight, Search, Filter, Plus } from "lucide-react"
+import { ArrowDownLeft, ArrowUpRight, Search, Filter, Plus, Edit, Trash2 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Table,
@@ -14,8 +14,12 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { AddTransactionDialog } from "@/components/dialogs/add-transaction-dialog"
+import { EditTransactionDialog } from "@/components/dialogs/edit-transaction-dialog"
+import { DeleteConfirmationModal } from "@/components/dialogs/delete-confirmation-modal"
 import { authUtils } from "@/lib/auth-client"
 import { API_CONFIG } from "@/lib/api-config"
+import { toast } from "sonner"
 
 interface ApiTransaction {
   id: string
@@ -40,8 +44,6 @@ interface Transaction {
   status: "Completed" | "Pending"
 }
 
-const categories = ["All", "General", "Income", "Housing", "Food", "Utilities", "Transport", "Entertainment"]
-
 export function TransactionsContent() {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -49,59 +51,125 @@ export function TransactionsContent() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [showCategoryFilter, setShowCategoryFilter] = useState(false)
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [selectedTransactionId, setSelectedTransactionId] = useState<string>("")
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
+  const [transactionToDelete, setTransactionToDelete] = useState<string>("")
+  const [isDeletingTransaction, setIsDeletingTransaction] = useState(false)
+  const [categories, setCategories] = useState<string[]>(["All"])
 
   useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        setIsLoading(true)
-        const token = authUtils.getToken()
-
-        if (!token) {
-          throw new Error("No token found. Please login first.")
-        }
-
-        const response = await fetch(API_CONFIG.getFullUrl(API_CONFIG.ENDPOINTS.TRANSACTIONS), {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        })
-        const data = await response.json()
-
-        if (!response.ok) {
-          throw new Error(data.message || "Failed to fetch transactions")
-        }
-
-        // Transform API data to component format
-        const transformedTransactions: Transaction[] = data.transactions.map(
-          (tx: ApiTransaction) => ({
-            id: tx.id,
-            description: tx.description,
-            category: tx.category,
-            amount: tx.type === "EXPENSE" || tx.type === "LOAN" ? -tx.amount : tx.amount,
-            type: tx.type.toLowerCase() as "income" | "expense" | "loan",
-            date: new Date(tx.transactionDate).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            }),
-            status: "Completed",
-          })
-        )
-
-        setTransactions(transformedTransactions)
-        setError(null)
-      } catch (err) {
-        console.error("Failed to fetch transactions:", err)
-        setError(err instanceof Error ? err.message : "Failed to fetch transactions")
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
     fetchTransactions()
+    fetchCategories()
   }, [])
+
+  const fetchCategories = async () => {
+    try {
+      const token = authUtils.getToken()
+      if (!token) return
+
+      const response = await fetch(`${window.location.origin}/api/categories`, {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      const data = await response.json()
+      if (response.ok && data.categories) {
+        setCategories(["All", ...data.categories])
+      }
+    } catch (error) {
+      console.error("Failed to fetch categories:", error)
+    }
+  }
+
+  const fetchTransactions = async () => {
+    try {
+      setIsLoading(true)
+      const token = authUtils.getToken()
+
+      if (!token) {
+        throw new Error("No token found. Please login first.")
+      }
+
+      const response = await fetch(API_CONFIG.getFullUrl(API_CONFIG.ENDPOINTS.TRANSACTIONS), {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch transactions")
+      }
+
+      // Transform API data to component format
+      const transformedTransactions: Transaction[] = data.transactions.map(
+        (tx: ApiTransaction) => ({
+          id: tx.id,
+          description: tx.description,
+          category: tx.category,
+          amount: tx.type === "EXPENSE" || tx.type === "LOAN" ? -tx.amount : tx.amount,
+          type: tx.type.toLowerCase() as "income" | "expense" | "loan",
+          date: new Date(tx.transactionDate).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }),
+          status: "Completed",
+        })
+      )
+
+      setTransactions(transformedTransactions)
+      setError(null)
+      // Refresh categories after fetching transactions
+      fetchCategories()
+    } catch (err) {
+      console.error("Failed to fetch transactions:", err)
+      setError(err instanceof Error ? err.message : "Failed to fetch transactions")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleDeleteTransaction = (transactionId: string) => {
+    setTransactionToDelete(transactionId)
+    setIsDeleteConfirmOpen(true)
+  }
+
+  const confirmDeleteTransaction = async () => {
+    if (!transactionToDelete) return
+
+    setIsDeletingTransaction(true)
+    try {
+      const token = authUtils.getToken()
+      if (!token) throw new Error("No token found")
+
+      const response = await fetch(`${window.location.origin}/api/transactions/${transactionToDelete}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to delete transaction")
+      }
+
+      toast.success("Transaction deleted successfully!")
+      setIsDeleteConfirmOpen(false)
+      setTransactionToDelete("")
+      fetchTransactions()
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to delete transaction")
+    } finally {
+      setIsDeletingTransaction(false)
+    }
+  }
 
   const filteredTransactions = transactions.filter((tx) => {
     const matchesSearch =
@@ -252,6 +320,7 @@ export function TransactionsContent() {
               <Button 
                 size="sm" 
                 className="h-9"
+                onClick={() => setIsAddDialogOpen(true)}
                 style={{ 
                   backgroundColor: "var(--stormy-teal)",
                   color: "#FFFFFF",
@@ -281,6 +350,7 @@ export function TransactionsContent() {
                   <TableHead style={{ color: "var(--charcoal-blue)" }}>Description</TableHead>
                   <TableHead style={{ color: "var(--charcoal-blue)" }}>Category</TableHead>
                   <TableHead className="text-right" style={{ color: "var(--charcoal-blue)" }}>Amount</TableHead>
+                  <TableHead className="text-right" style={{ color: "var(--charcoal-blue)" }}>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -330,11 +400,32 @@ export function TransactionsContent() {
                       >
                         {tx.type === "income" ? "+" : "-"}${Math.abs(tx.amount).toFixed(2)}
                       </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                          <button
+                            onClick={() => {
+                              setSelectedTransactionId(tx.id)
+                              setIsEditDialogOpen(true)
+                            }}
+                            className="p-1.5 hover:bg-gray-100 rounded-md transition"
+                            title="Edit transaction"
+                          >
+                            <Edit className="size-4" style={{ color: "var(--stormy-teal)" }} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteTransaction(tx.id)}
+                            className="p-1.5 hover:bg-gray-100 rounded-md transition"
+                            title="Delete transaction"
+                          >
+                            <Trash2 className="size-4" style={{ color: "#ef4444" }} />
+                          </button>
+                        </div>
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center py-6" style={{ color: "var(--stormy-teal)" }}>
+                    <TableCell colSpan={5} className="text-center py-6" style={{ color: "var(--stormy-teal)" }}>
                       No transactions found
                     </TableCell>
                   </TableRow>
@@ -344,6 +435,29 @@ export function TransactionsContent() {
           )}
         </CardContent>
       </Card>
+
+      <AddTransactionDialog 
+        isOpen={isAddDialogOpen}
+        onClose={() => setIsAddDialogOpen(false)}
+        onTransactionAdded={fetchTransactions}
+      />
+
+      <EditTransactionDialog 
+        isOpen={isEditDialogOpen}
+        onClose={() => setIsEditDialogOpen(false)}
+        onTransactionUpdated={fetchTransactions}
+        transactionId={selectedTransactionId}
+      />
+
+      <DeleteConfirmationModal 
+        isOpen={isDeleteConfirmOpen}
+        onConfirm={confirmDeleteTransaction}
+        onCancel={() => {
+          setIsDeleteConfirmOpen(false)
+          setTransactionToDelete("")
+        }}
+        isLoading={isDeletingTransaction}
+      />
     </div>
   )
 }

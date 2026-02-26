@@ -29,7 +29,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // Parse request body
-    const { type, amount, description, transactionDate, budgetId, loanId } =
+    const { type, amount, description, category, transactionDate, budgetId, loanId } =
       (await request.json()) as TransactionRequest;
 
     // Validate required fields
@@ -48,6 +48,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       type,
       amount,
       description,
+      category,
       transactionDate,
       budgetId,
       loanId,
