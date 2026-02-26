@@ -75,28 +75,33 @@ export default function Home() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: "var(--dark-teal)" }}>
-      <div className="w-full max-w-md p-8 rounded-lg shadow-lg" style={{ backgroundColor: "var(--ink-black)", color: "var(--foreground)" }}>
+    <div className="flex min-h-screen items-center justify-center p-4" style={{ backgroundColor: "var(--dark-teal)" }}>
+      <div className="w-full max-w-sm sm:max-w-md p-4 sm:p-8 rounded-lg shadow-lg" style={{ backgroundColor: "var(--ink-black)", color: "var(--foreground)" }}>
         {/* Logo */}
         <div className="flex justify-center mb-4">
           <Image
             src="/budgetguru.png"
             alt="BudgetGuru logo"
-            width={240}
-            height={240}
+            width={200}
+            height={200}
+            className="w-32 sm:w-48 h-auto"
             priority
           />
         </div>
 
         {/* Title */}
-        <p className="text-center mb-8" style={{ color: "var(--steel-blue)" }}>
-          Create your account to get started
+        <h1 className="text-center text-xl sm:text-2xl font-bold mb-4" style={{ color: "var(--stormy-teal)" }}>
+          Create Account
+        </h1>
+
+        <p className="text-center text-sm sm:text-base mb-6 sm:mb-8" style={{ color: "var(--steel-blue)" }}>
+          Get started with BudgetGuru
         </p>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Name and Username Row */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-sm font-medium mb-2" style={{ color: "var(--steel-blue)" }}>
                 Name

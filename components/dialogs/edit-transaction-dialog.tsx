@@ -211,8 +211,8 @@ export function EditTransactionDialog({ isOpen, onClose, onTransactionUpdated, t
       <div className="fixed inset-0 backdrop-blur-sm z-40" />
       
       {/* Dialog */}
-      <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
-        <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 pointer-events-auto border-2 dialog-animate" style={{ borderColor: "var(--stormy-teal)" }}>
+      <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none p-4">
+        <div className="bg-white rounded-lg shadow-lg w-full max-w-sm sm:max-w-md p-4 sm:p-6 pointer-events-auto border-2 dialog-animate" style={{ borderColor: "var(--stormy-teal)" }}>
         <h2 className="text-2xl font-bold mb-4" style={{ color: "var(--charcoal-blue)" }}>
           Edit Transaction
         </h2>

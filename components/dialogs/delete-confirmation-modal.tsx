@@ -28,8 +28,8 @@ export function DeleteConfirmationModal({
       <div className="fixed inset-0 backdrop-blur-sm z-40" />
 
       {/* Modal */}
-      <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
-        <div className="bg-white rounded-lg shadow-lg w-full max-w-sm p-6 pointer-events-auto border-2 dialog-animate" style={{ borderColor: "var(--stormy-teal)" }}>
+      <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none p-4">
+        <div className="bg-white rounded-lg shadow-lg w-full max-w-sm p-4 sm:p-6 pointer-events-auto border-2 dialog-animate" style={{ borderColor: "var(--stormy-teal)" }}>
           {/* Icon */}
           <div className="flex justify-center mb-4">
             <div

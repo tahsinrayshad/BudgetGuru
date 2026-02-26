@@ -31,18 +31,18 @@ const budgets = [
 
 export function DashboardContent() {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 sm:gap-6">
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">
+            <CardTitle className="text-xs sm:text-sm font-medium text-gray-700">
               Total Balance
             </CardTitle>
             <DollarSign className="size-4" style={{ color: "var(--stormy-teal)" }} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold" style={{ color: "var(--stormy-teal)" }}>
+            <div className="text-xl sm:text-2xl font-bold" style={{ color: "var(--stormy-teal)" }}>
               $24,563.00
             </div>
             <div className="flex items-center gap-1 mt-1">
@@ -57,13 +57,13 @@ export function DashboardContent() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">
+            <CardTitle className="text-xs sm:text-sm font-medium text-gray-700">
               Monthly Income
             </CardTitle>
             <TrendingUp className="size-4" style={{ color: "var(--steel-blue)" }} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold" style={{ color: "var(--steel-blue)" }}>
+            <div className="text-xl sm:text-2xl font-bold" style={{ color: "var(--steel-blue)" }}>
               $6,100.00
             </div>
             <div className="flex items-center gap-1 mt-1">
@@ -78,13 +78,13 @@ export function DashboardContent() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">
+            <CardTitle className="text-xs sm:text-sm font-medium text-gray-700">
               Monthly Expenses
             </CardTitle>
             <CreditCard className="size-4" style={{ color: "var(--dark-cyan)" }} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold" style={{ color: "var(--dark-cyan)" }}>
+            <div className="text-xl sm:text-2xl font-bold" style={{ color: "var(--dark-cyan)" }}>
               $3,500.00
             </div>
             <div className="flex items-center gap-1 mt-1">
@@ -99,13 +99,13 @@ export function DashboardContent() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">
+            <CardTitle className="text-xs sm:text-sm font-medium text-gray-700">
               Savings Goal
             </CardTitle>
             <PiggyBank className="size-4" style={{ color: "var(--steel-blue)" }} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold" style={{ color: "var(--steel-blue)" }}>
+            <div className="text-xl sm:text-2xl font-bold" style={{ color: "var(--steel-blue)" }}>
               $8,200.00
             </div>
             <div className="flex items-center gap-1 mt-1">
@@ -122,7 +122,7 @@ export function DashboardContent() {
       {/* Budget Progress */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base" style={{ color: "var(--charcoal-blue)" }}>
+          <CardTitle className="text-base sm:text-lg" style={{ color: "var(--charcoal-blue)" }}>
             Budget Progress
           </CardTitle>
           <CardDescription className="text-gray-600">Track your monthly spending limits</CardDescription>

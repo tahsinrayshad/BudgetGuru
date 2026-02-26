@@ -73,26 +73,31 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: "var(--dark-teal)" }}>
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg" style={{ backgroundColor: "var(--ink-black)", color: "var(--foreground)" }}>
+    <div className="flex min-h-screen items-center justify-center p-4" style={{ backgroundColor: "var(--dark-teal)" }}>
+      <div className="w-full max-w-sm sm:max-w-md p-4 sm:p-8 bg-white rounded-lg shadow-lg" style={{ backgroundColor: "var(--ink-black)", color: "var(--foreground)" }}>
         {/* Logo */}
         <div className="flex justify-center mb-4">
           <Image
             src="/budgetguru.png"
             alt="BudgetGuru logo"
-            width={240}
-            height={240}
+            width={200}
+            height={200}
+            className="w-32 sm:w-48 h-auto"
             priority
           />
         </div>
 
         {/* Title */}
-        <p className="text-center mb-8" style={{ color: "var(--steel-blue)" }}>
+        <h1 className="text-center text-xl sm:text-2xl font-bold mb-2" style={{ color: "var(--stormy-teal)" }}>
+          Welcome Back
+        </h1>
+
+        <p className="text-center text-sm sm:text-base mb-6 sm:mb-8" style={{ color: "var(--steel-blue)" }}>
           Sign in to your account
         </p>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Email Row */}
           <div>
             <label className="block text-sm font-medium mb-2" style={{ color: "var(--steel-blue)" }}>

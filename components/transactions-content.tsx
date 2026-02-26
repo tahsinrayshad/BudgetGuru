@@ -195,7 +195,7 @@ export function TransactionsContent() {
   return (
     <div className="flex flex-col gap-6">
       {/* Summary row */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-3">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium" style={{ color: "#10b981" }}>
@@ -245,23 +245,23 @@ export function TransactionsContent() {
       </div>
 
       {/* Transactions Table */}
-      <Card>
-        <CardHeader>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <Card className="overflow-hidden">
+        <CardHeader className="p-4 sm:p-6">
+          <div className="flex flex-col gap-4">
             <div>
               <CardTitle className="text-base" style={{ color: "var(--charcoal-blue)" }}>
                 Recent Transactions
               </CardTitle>
               <CardDescription>All account activity</CardDescription>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="relative">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full">
+              <div className="relative flex-1 sm:flex-none">
                 <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2" style={{ color: "var(--stormy-teal)" }} />
                 <Input 
                   placeholder="Search transactions..." 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 h-9 w-64" 
+                  className="pl-9 h-9 w-full sm:w-64" 
                   style={{ 
                     borderColor: "var(--steel-blue)",
                     backgroundColor: "#FFFFFF",
@@ -278,11 +278,11 @@ export function TransactionsContent() {
                   }}
                 />
               </div>
-              <div className="relative">
+              <div className="relative flex-1 sm:flex-none">
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="h-9"
+                  className="h-9 w-full sm:w-auto"
                   onClick={() => setShowCategoryFilter(!showCategoryFilter)}
                   style={{ 
                     borderColor: "var(--stormy-teal)", 
@@ -319,7 +319,7 @@ export function TransactionsContent() {
               </div>
               <Button 
                 size="sm" 
-                className="h-9"
+                className="h-9 w-full sm:w-auto"
                 onClick={() => setIsAddDialogOpen(true)}
                 style={{ 
                   backgroundColor: "var(--stormy-teal)",
@@ -328,12 +328,13 @@ export function TransactionsContent() {
                 }}
               >
                 <Plus className="size-4 mr-1.5" />
-                Add Transaction
+                <span className="hidden sm:inline">Add Transaction</span>
+                <span className="sm:hidden">Add</span>
               </Button>
             </div>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-4 sm:p-6 overflow-hidden">
           {isLoading ? (
             <div className="text-center py-6" style={{ color: "var(--stormy-teal)" }}>
               Loading transactions...
@@ -343,14 +344,15 @@ export function TransactionsContent() {
               {error}
             </div>
           ) : (
+            <div className="overflow-x-auto -mx-6 sm:mx-0">
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent" style={{ borderColor: "var(--steel-blue)" }}>
-                  <TableHead style={{ color: "var(--charcoal-blue)" }}>Date</TableHead>
-                  <TableHead style={{ color: "var(--charcoal-blue)" }}>Description</TableHead>
-                  <TableHead style={{ color: "var(--charcoal-blue)" }}>Category</TableHead>
-                  <TableHead className="text-right" style={{ color: "var(--charcoal-blue)" }}>Amount</TableHead>
-                  <TableHead className="text-right" style={{ color: "var(--charcoal-blue)" }}>Actions</TableHead>
+                  <TableHead style={{ color: "var(--charcoal-blue)" }} className="whitespace-nowrap">Date</TableHead>
+                  <TableHead style={{ color: "var(--charcoal-blue)" }} className="whitespace-nowrap">Description</TableHead>
+                  <TableHead style={{ color: "var(--charcoal-blue)" }} className="whitespace-nowrap">Category</TableHead>
+                  <TableHead className="text-right whitespace-nowrap" style={{ color: "var(--charcoal-blue)" }}>Amount</TableHead>
+                  <TableHead className="text-right whitespace-nowrap" style={{ color: "var(--charcoal-blue)" }}>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -432,6 +434,7 @@ export function TransactionsContent() {
                 )}
               </TableBody>
             </Table>
+            </div>
           )}
         </CardContent>
       </Card>
