@@ -5,6 +5,7 @@ import { Loader } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Calendar } from "@/components/ui/calendar"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { authUtils } from "@/lib/auth-client"
 import { API_CONFIG } from "@/lib/api-config"
@@ -317,21 +318,12 @@ export function AddTransactionDialog({ isOpen, onClose, onTransactionAdded }: Ad
 
           {/* Transaction Date */}
           <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: "var(--charcoal-blue)" }}>
+            <label className="block text-sm font-medium mb-3" style={{ color: "var(--charcoal-blue)" }}>
               Date *
             </label>
-            <Input
-              type="date"
-              name="transactionDate"
+            <Calendar
               value={formData.transactionDate}
-              onChange={handleChange}
-              className="w-full"
-              style={{
-                borderColor: "var(--steel-blue)",
-                backgroundColor: "#FFFFFF",
-                color: "var(--charcoal-blue)",
-              }}
-              required
+              onChange={(date) => setFormData((prev) => ({ ...prev, transactionDate: date }))}
             />
           </div>
 
