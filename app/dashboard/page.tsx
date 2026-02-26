@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
 import { DashboardContent } from "@/components/dashboard-content"
 import { TransactionsContent } from "@/components/transactions-content"
+import { BudgetsContent } from "@/components/budget-content"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { authUtils } from "@/lib/auth-client"
 
@@ -87,16 +88,12 @@ export default function Dashboard() {
             {/* Content based on active tab */}
             {activeTab === "dashboard" && <DashboardContent />}
             {activeTab === "transactions" && <TransactionsContent />}
-          {activeTab === "budgets" && (
-            <div className="bg-amber-50 rounded-lg p-8 text-center text-gray-600">
-              Budgets content coming soon...
-            </div>
-          )}
-          {activeTab === "loans" && (
-            <div className="bg-amber-50 rounded-lg p-8 text-center text-gray-600">
-              Loans content coming soon...
-            </div>
-          )}
+            {activeTab === "budgets" && <BudgetsContent />}
+            {activeTab === "loans" && (
+              <div className="bg-amber-50 rounded-lg p-8 text-center text-gray-600">
+                Loans content coming soon...
+              </div>
+            )}
         </div>
       </div>
       </div>
