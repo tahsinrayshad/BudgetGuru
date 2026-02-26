@@ -14,7 +14,7 @@ const Card = React.forwardRef<
     )}
     style={{
       backgroundColor: "#FDFCFB",
-      borderColor: "#E7D7C1",
+      borderColor: "var(--stormy-teal)",
     }}
     {...props}
   />

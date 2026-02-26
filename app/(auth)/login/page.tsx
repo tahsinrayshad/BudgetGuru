@@ -73,8 +73,8 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: "#E7D7C1" }}>
-      <div className="w-full max-w-md p-8 bg-amber-50 rounded-lg shadow-lg">
+    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: "var(--dark-teal)" }}>
+      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg" style={{ backgroundColor: "var(--ink-black)", color: "var(--foreground)" }}>
         {/* Logo */}
         <div className="flex justify-center mb-4">
           <Image
@@ -87,7 +87,7 @@ export default function Login() {
         </div>
 
         {/* Title */}
-        <p className="text-center text-gray-600 mb-8">
+        <p className="text-center mb-8" style={{ color: "var(--steel-blue)" }}>
           Sign in to your account
         </p>
 
@@ -95,7 +95,7 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Email Row */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: "var(--steel-blue)" }}>
               Email
             </label>
             <input
@@ -104,15 +104,20 @@ export default function Login() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Email address"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:border-transparent bg-white text-gray-900 outline-none transition"
-              style={{ "--tw-ring-color": "#735751" } as React.CSSProperties}
+              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:border-transparent outline-none transition"
+              style={{ 
+                borderColor: "var(--stormy-teal)",
+                backgroundColor: "var(--dark-teal)",
+                color: "var(--foreground)",
+                "--tw-ring-color": "var(--stormy-teal)"
+              } as React.CSSProperties}
               required
             />
           </div>
 
           {/* Password Row */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: "var(--steel-blue)" }}>
               Password
             </label>
             <input
@@ -121,7 +126,12 @@ export default function Login() {
               value={formData.password}
               onChange={handleChange}
               placeholder="Password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:border-transparent bg-white text-gray-900 outline-none transition"
+              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:border-transparent outline-none transition"
+              style={{
+                borderColor: "var(--stormy-teal)",
+                backgroundColor: "var(--dark-teal)",
+                color: "var(--foreground)"
+              }}
               required
             />
           </div>
@@ -131,23 +141,23 @@ export default function Login() {
             type="submit"
             disabled={isLoading}
             className="w-full py-3 px-4 text-white font-semibold rounded-md transition duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ backgroundColor: isLoading ? "#a78a7f" : "#735751" }}
-            onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = "#5e4542")}
-            onMouseLeave={(e) => !isLoading && (e.currentTarget.style.backgroundColor = "#735751")}
+            style={{ backgroundColor: isLoading ? "var(--steel-blue)" : "var(--stormy-teal)" }}
+            onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = "var(--charcoal-blue)")}
+            onMouseLeave={(e) => !isLoading && (e.currentTarget.style.backgroundColor = "var(--stormy-teal)")}
           >
             {isLoading ? "Signing In..." : "Sign In"}
           </button>
         </form>
 
         {/* Sign Up Link */}
-        <p className="text-center text-gray-600 mt-6">
+        <p className="text-center mt-6" style={{ color: "var(--steel-blue)" }}>
           Don't have an account?{" "}
           <a
             href="/"
             className="font-semibold"
-            style={{ color: "#735751" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#5e4542")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#735751")}
+            style={{ color: "var(--stormy-teal)" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--charcoal-blue)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--stormy-teal)")}
           >
             Sign Up
           </a>

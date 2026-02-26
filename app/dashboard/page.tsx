@@ -25,7 +25,7 @@ export default function Dashboard() {
         <div className="flex-1 overflow-auto">
           <div className="p-8">
             <div className="mb-8">
-              <h1 className="text-3xl font-bold" style={{ color: "var(--deep-mocha)" }}>
+              <h1 className="text-3xl font-bold" style={{ color: "var(--charcoal-blue)" }}>
                 {activeTab === "dashboard" && "Dashboard"}
                 {activeTab === "transactions" && "Transactions"}
                 {activeTab === "budgets" && "Budgets"}

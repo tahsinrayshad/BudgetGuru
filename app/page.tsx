@@ -75,8 +75,8 @@ export default function Home() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: "#E7D7C1" }}>
-      <div className="w-full max-w-md p-8 bg-amber-50 rounded-lg shadow-lg">
+    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: "var(--dark-teal)" }}>
+      <div className="w-full max-w-md p-8 rounded-lg shadow-lg" style={{ backgroundColor: "var(--ink-black)", color: "var(--foreground)" }}>
         {/* Logo */}
         <div className="flex justify-center mb-4">
           <Image
@@ -89,7 +89,7 @@ export default function Home() {
         </div>
 
         {/* Title */}
-        <p className="text-center text-gray-600 mb-8">
+        <p className="text-center mb-8" style={{ color: "var(--steel-blue)" }}>
           Create your account to get started
         </p>
 
@@ -98,7 +98,7 @@ export default function Home() {
           {/* Name and Username Row */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium mb-2" style={{ color: "var(--steel-blue)" }}>
                 Name
               </label>
               <input
@@ -107,13 +107,18 @@ export default function Home() {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Full name"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:border-transparent bg-white text-gray-900 outline-none transition"
-                style={{ "--tw-ring-color": "#735751" } as React.CSSProperties}
+                className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:border-transparent outline-none transition"
+                style={{ 
+                  borderColor: "var(--stormy-teal)",
+                  backgroundColor: "var(--dark-teal)",
+                  color: "var(--foreground)",
+                  "--tw-ring-color": "var(--stormy-teal)"
+                } as React.CSSProperties}
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium mb-2" style={{ color: "var(--steel-blue)" }}>
                 Username
               </label>
               <input
@@ -122,7 +127,12 @@ export default function Home() {
                 value={formData.username}
                 onChange={handleChange}
                 placeholder="Username"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:border-transparent bg-white text-gray-900 outline-none transition"
+                className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:border-transparent outline-none transition"
+                style={{ 
+                  borderColor: "var(--stormy-teal)",
+                  backgroundColor: "var(--dark-teal)",
+                  color: "var(--foreground)"
+                }}
                 required
               />
             </div>
@@ -130,7 +140,7 @@ export default function Home() {
 
           {/* Email Row */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: "var(--steel-blue)" }}>
               Email
             </label>
             <input
@@ -139,7 +149,12 @@ export default function Home() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Email address"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:border-transparent bg-white text-gray-900 outline-none transition"
+              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:border-transparent outline-none transition"
+              style={{ 
+                borderColor: "var(--stormy-teal)",
+                backgroundColor: "var(--dark-teal)",
+                color: "var(--foreground)"
+              }}
               required
             />
           </div>
@@ -147,7 +162,7 @@ export default function Home() {
           {/* Password and Confirm Password Row */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium mb-2" style={{ color: "var(--steel-blue)" }}>
                 Password
               </label>
               <input
@@ -156,12 +171,17 @@ export default function Home() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Password"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:border-transparent bg-white text-gray-900 outline-none transition"
+                className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:border-transparent outline-none transition"
+                style={{ 
+                  borderColor: "var(--stormy-teal)",
+                  backgroundColor: "var(--dark-teal)",
+                  color: "var(--foreground)"
+                }}
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium mb-2" style={{ color: "var(--steel-blue)" }}>
                 Confirm Password
               </label>
               <input
@@ -170,7 +190,12 @@ export default function Home() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Confirm password"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:border-transparent bg-white text-gray-900 outline-none transition"
+                className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:border-transparent outline-none transition"
+                style={{ 
+                  borderColor: "var(--stormy-teal)",
+                  backgroundColor: "var(--dark-teal)",
+                  color: "var(--foreground)"
+                }}
                 required
               />
             </div>
@@ -181,23 +206,23 @@ export default function Home() {
             type="submit"
             disabled={isLoading}
             className="w-full py-3 px-4 text-white font-semibold rounded-md transition duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ backgroundColor: isLoading ? "#a78a7f" : "#735751" }}
-            onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = "#5e4542")}
-            onMouseLeave={(e) => !isLoading && (e.currentTarget.style.backgroundColor = "#735751")}
+            style={{ backgroundColor: isLoading ? "var(--steel-blue)" : "var(--stormy-teal)" }}
+            onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = "var(--charcoal-blue)")}
+            onMouseLeave={(e) => !isLoading && (e.currentTarget.style.backgroundColor = "var(--stormy-teal)")}
           >
             {isLoading ? "Creating Account..." : "Sign Up"}
           </button>
         </form>
 
         {/* Login Link */}
-        <p className="text-center text-gray-600 mt-6">
+        <p className="text-center mt-6" style={{ color: "var(--steel-blue)" }}>
           Already have an account?{" "}
           <a
             href="/login"
             className="font-semibold"
-            style={{ color: "#735751" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#5e4542")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#735751")}
+            style={{ color: "var(--stormy-teal)" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--charcoal-blue)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--stormy-teal)")}
           >
             Sign In
           </a>

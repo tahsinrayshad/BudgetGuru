@@ -47,8 +47,8 @@ const Sidebar = React.forwardRef<
         className
       )}
       style={{ 
-        backgroundColor: "#402a2c",
-        borderRight: "1px solid #402a2c"
+        backgroundColor: "var(--dark-teal)",
+        borderRight: "1px solid var(--dark-teal)"
       }}
       {...props}
     />
@@ -87,7 +87,7 @@ const SidebarFooter = React.forwardRef<
   <div
     ref={ref}
     className={cn("flex flex-col gap-2 p-3", className)}
-    style={{ borderTop: "1px solid #E7D7C1" }}
+    style={{ borderTop: "1px solid var(--stormy-teal)" }}
     {...props}
   />
 ))
@@ -100,7 +100,7 @@ const SidebarSeparator = React.forwardRef<
   <div
     ref={ref}
     className={cn("mx-0 my-2 h-px", className)}
-    style={{ backgroundColor: "#E7D7C1" }}
+    style={{ backgroundColor: "var(--dark-teal)" }}
     {...props}
   />
 ))
@@ -170,12 +170,12 @@ const SidebarMenuButton = React.forwardRef<
     className={cn(
       "flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors text-white hover:opacity-90",
       isActive
-        ? "bg-mauve-bark"
+        ? "hover:bg-opacity-75"
         : "hover:bg-opacity-75",
       size === "lg" && "h-12 px-2",
       className
     )}
-    style={isActive ? { backgroundColor: "#703d57" } : { color: "rgba(255, 255, 255, 0.8)" }}
+    style={isActive ? { backgroundColor: "var(--stormy-teal)" } : { color: "rgba(255, 255, 255, 0.8)" }}
     title={tooltip}
     {...props}
   />

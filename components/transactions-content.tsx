@@ -130,16 +130,16 @@ export function TransactionsContent() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium" style={{ color: "var(--dusty-mauve)" }}>
+            <CardTitle className="text-sm font-medium" style={{ color: "#10b981" }}>
               Total Inflow
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <div className="flex size-8 items-center justify-center rounded-full" style={{ backgroundColor: "var(--dusty-mauve)" }}>
+              <div className="flex size-8 items-center justify-center rounded-full" style={{ backgroundColor: "#10b981" }}>
                 <ArrowDownLeft className="size-4" style={{ color: "#FFFFFF" }} />
               </div>
-              <span className="text-2xl font-bold" style={{ color: "var(--deep-mocha)" }}>
+              <span className="text-2xl font-bold" style={{ color: "var(--charcoal-blue)" }}>
                 ${totalInflow.toFixed(2)}
               </span>
             </div>
@@ -147,16 +147,16 @@ export function TransactionsContent() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium" style={{ color: "var(--mauve-shadow)" }}>
+            <CardTitle className="text-sm font-medium" style={{ color: "#ef4444" }}>
               Total Outflow
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <div className="flex size-8 items-center justify-center rounded-full" style={{ backgroundColor: "var(--mauve-shadow)" }}>
+              <div className="flex size-8 items-center justify-center rounded-full" style={{ backgroundColor: "#ef4444" }}>
                 <ArrowUpRight className="size-4" style={{ color: "#FFFFFF" }} />
               </div>
-              <span className="text-2xl font-bold" style={{ color: "var(--deep-mocha)" }}>
+              <span className="text-2xl font-bold" style={{ color: "var(--charcoal-blue)" }}>
                 ${totalOutflow.toFixed(2)}
               </span>
             </div>
@@ -164,12 +164,12 @@ export function TransactionsContent() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium" style={{ color: "var(--dusty-mauve)" }}>
+            <CardTitle className="text-sm font-medium" style={{ color: "var(--stormy-teal)" }}>
               Net Balance
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <span className="text-2xl font-bold" style={{ color: "var(--dusty-mauve)" }}>
+            <span className="text-2xl font-bold" style={{ color: "var(--stormy-teal)" }}>
               {netBalance >= 0 ? "+" : ""}{netBalance.toFixed(2)}
             </span>
           </CardContent>
@@ -181,31 +181,32 @@ export function TransactionsContent() {
         <CardHeader>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <CardTitle className="text-base" style={{ color: "var(--deep-mocha)" }}>
+              <CardTitle className="text-base" style={{ color: "var(--charcoal-blue)" }}>
                 Recent Transactions
               </CardTitle>
               <CardDescription>All account activity</CardDescription>
             </div>
             <div className="flex items-center gap-2">
               <div className="relative">
-                <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2" style={{ color: "var(--dusty-mauve)" }} />
+                <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2" style={{ color: "var(--stormy-teal)" }} />
                 <Input 
                   placeholder="Search transactions..." 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-9 h-9 w-64" 
                   style={{ 
-                    borderColor: "var(--pastel-petal)",
+                    borderColor: "var(--steel-blue)",
                     backgroundColor: "#FFFFFF",
                     outline: "none",
+                    color: "var(--ink-black)"
                   }}
                   onFocus={(e) => {
-                    e.currentTarget.style.boxShadow = `0 0 0 2px var(--dusty-mauve)`
-                    e.currentTarget.style.border = "1px solid var(--dusty-mauve)"
+                    e.currentTarget.style.boxShadow = `0 0 0 2px var(--stormy-teal)`
+                    e.currentTarget.style.border = "1px solid var(--stormy-teal)"
                   }}
                   onBlur={(e) => {
                     e.currentTarget.style.boxShadow = "none"
-                    e.currentTarget.style.border = "1px solid var(--pastel-petal)"
+                    e.currentTarget.style.border = "1px solid var(--steel-blue)"
                   }}
                 />
               </div>
@@ -216,8 +217,8 @@ export function TransactionsContent() {
                   className="h-9"
                   onClick={() => setShowCategoryFilter(!showCategoryFilter)}
                   style={{ 
-                    borderColor: "var(--dusty-mauve)", 
-                    color: "var(--dusty-mauve)",
+                    borderColor: "var(--stormy-teal)", 
+                    color: "var(--charcoal-blue)",
                     backgroundColor: "#FFFFFF"
                   }}
                 >
@@ -226,8 +227,8 @@ export function TransactionsContent() {
                 </Button>
                 {showCategoryFilter && (
                   <div 
-                    className="absolute top-full right-0 mt-1 bg-white rounded-md shadow-lg border p-2 z-10 min-w-max"
-                    style={{ borderColor: "var(--pastel-petal)" }}
+                    className="absolute top-full right-0 mt-1 rounded-md shadow-lg border p-2 z-10 min-w-max"
+                    style={{ borderColor: "var(--steel-blue)", backgroundColor: "#FFFFFF" }}
                   >
                     {categories.map((cat) => (
                       <button
@@ -238,8 +239,8 @@ export function TransactionsContent() {
                         }}
                         className="block w-full text-left px-3 py-1.5 text-sm rounded hover:opacity-75 transition"
                         style={{
-                          color: selectedCategory === cat ? "#FFFFFF" : "var(--coffee-bean)",
-                          backgroundColor: selectedCategory === cat ? "var(--dusty-mauve)" : "transparent"
+                          color: selectedCategory === cat ? "#FFFFFF" : "var(--charcoal-blue)",
+                          backgroundColor: selectedCategory === cat ? "var(--stormy-teal)" : "transparent"
                         }}
                       >
                         {cat}
@@ -252,7 +253,7 @@ export function TransactionsContent() {
                 size="sm" 
                 className="h-9"
                 style={{ 
-                  backgroundColor: "var(--dusty-mauve)",
+                  backgroundColor: "var(--stormy-teal)",
                   color: "#FFFFFF",
                   border: "none"
                 }}
@@ -265,28 +266,28 @@ export function TransactionsContent() {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <div className="text-center py-6" style={{ color: "var(--dusty-mauve)" }}>
+            <div className="text-center py-6" style={{ color: "var(--stormy-teal)" }}>
               Loading transactions...
             </div>
           ) : error ? (
-            <div className="text-center py-6" style={{ color: "var(--mauve-shadow)" }}>
+            <div className="text-center py-6" style={{ color: "var(--dark-cyan)" }}>
               {error}
             </div>
           ) : (
             <Table>
               <TableHeader>
-                <TableRow className="hover:bg-transparent" style={{ borderColor: "var(--pastel-petal)" }}>
-                  <TableHead style={{ color: "var(--deep-mocha)" }}>Date</TableHead>
-                  <TableHead style={{ color: "var(--deep-mocha)" }}>Description</TableHead>
-                  <TableHead style={{ color: "var(--deep-mocha)" }}>Category</TableHead>
-                  <TableHead className="text-right" style={{ color: "var(--deep-mocha)" }}>Amount</TableHead>
+                <TableRow className="hover:bg-transparent" style={{ borderColor: "var(--steel-blue)" }}>
+                  <TableHead style={{ color: "var(--charcoal-blue)" }}>Date</TableHead>
+                  <TableHead style={{ color: "var(--charcoal-blue)" }}>Description</TableHead>
+                  <TableHead style={{ color: "var(--charcoal-blue)" }}>Category</TableHead>
+                  <TableHead className="text-right" style={{ color: "var(--charcoal-blue)" }}>Amount</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredTransactions.length > 0 ? (
                   filteredTransactions.map((tx) => (
-                    <TableRow key={tx.id} style={{ borderColor: "var(--pastel-petal)" }}>
-                      <TableCell className="font-medium" style={{ color: "var(--coffee-bean)" }}>
+                    <TableRow key={tx.id} style={{ borderColor: "var(--steel-blue)" }}>
+                      <TableCell className="font-medium" style={{ color: "var(--ink-black)" }}>
                         {tx.date}
                       </TableCell>
                       <TableCell>
@@ -294,7 +295,7 @@ export function TransactionsContent() {
                           <div 
                             className="flex size-8 shrink-0 items-center justify-center rounded-full"
                             style={{
-                              backgroundColor: tx.type === "income" ? "var(--dusty-mauve)" : "var(--mauve-shadow)"
+                              backgroundColor: tx.type === "income" ? "#10b981" : tx.type === "expense" ? "#ef4444" : "#f59e0b"
                             }}
                           >
                             {tx.type === "income" ? (
@@ -303,7 +304,7 @@ export function TransactionsContent() {
                               <ArrowUpRight className="size-4" style={{ color: "#FFFFFF" }} />
                             )}
                           </div>
-                          <span className="font-medium" style={{ color: "var(--coffee-bean)" }}>
+                          <span className="font-medium" style={{ color: "var(--ink-black)" }}>
                             {tx.description}
                           </span>
                         </div>
@@ -313,9 +314,9 @@ export function TransactionsContent() {
                           variant="secondary"
                           className="font-normal"
                           style={{
-                            backgroundColor: "var(--pastel-petal)",
-                            color: "var(--coffee-bean)",
-                            border: "1px solid var(--dusty-mauve)"
+                            backgroundColor: "var(--steel-blue)",
+                            color: "var(--ink-black)",
+                            border: "1px solid var(--stormy-teal)"
                           }}
                         >
                           {tx.category}
@@ -324,7 +325,7 @@ export function TransactionsContent() {
                       <TableCell 
                         className="text-right font-medium"
                         style={{
-                          color: tx.type === "income" ? "var(--dusty-mauve)" : "var(--mauve-shadow)"
+                          color: tx.type === "income" ? "#10b981" : tx.type === "expense" ? "#ef4444" : "#f59e0b"
                         }}
                       >
                         {tx.type === "income" ? "+" : "-"}${Math.abs(tx.amount).toFixed(2)}
@@ -333,7 +334,7 @@ export function TransactionsContent() {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center py-6" style={{ color: "var(--dusty-mauve)" }}>
+                    <TableCell colSpan={4} className="text-center py-6" style={{ color: "var(--stormy-teal)" }}>
                       No transactions found
                     </TableCell>
                   </TableRow>

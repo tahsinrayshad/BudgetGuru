@@ -23,10 +23,10 @@ const spendingData = [
 ]
 
 const budgets = [
-  { name: "Groceries", spent: 420, total: 600, color: "bg-blue-500" },
-  { name: "Dining Out", spent: 180, total: 200, color: "bg-purple-500" },
-  { name: "Transportation", spent: 120, total: 300, color: "bg-green-500" },
-  { name: "Entertainment", spent: 95, total: 150, color: "bg-orange-500" },
+  { name: "Groceries", spent: 420, total: 600, color: "bg-cyan-500" },
+  { name: "Dining Out", spent: 180, total: 200, color: "bg-teal-500" },
+  { name: "Transportation", spent: 120, total: 300, color: "bg-blue-500" },
+  { name: "Entertainment", spent: 95, total: 150, color: "bg-slate-500" },
 ]
 
 export function DashboardContent() {
@@ -39,15 +39,15 @@ export function DashboardContent() {
             <CardTitle className="text-sm font-medium text-gray-700">
               Total Balance
             </CardTitle>
-            <DollarSign className="size-4" style={{ color: "var(--mauve-bark)" }} />
+            <DollarSign className="size-4" style={{ color: "var(--stormy-teal)" }} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold" style={{ color: "var(--mauve-bark)" }}>
+            <div className="text-2xl font-bold" style={{ color: "var(--stormy-teal)" }}>
               $24,563.00
             </div>
             <div className="flex items-center gap-1 mt-1">
-              <TrendingUp className="size-3" style={{ color: "#8CE77F" }} />
-              <span className="text-xs" style={{ color: "#8CE77F" }}>
+              <TrendingUp className="size-3" style={{ color: "var(--steel-blue)" }} />
+              <span className="text-xs" style={{ color: "var(--steel-blue)" }}>
                 +12.5%
               </span>
               <span className="text-xs text-gray-600">from last month</span>
@@ -60,15 +60,15 @@ export function DashboardContent() {
             <CardTitle className="text-sm font-medium text-gray-700">
               Monthly Income
             </CardTitle>
-            <TrendingUp className="size-4" style={{ color: "#8CE77F" }} />
+            <TrendingUp className="size-4" style={{ color: "var(--steel-blue)" }} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold" style={{ color: "#8CE77F" }}>
+            <div className="text-2xl font-bold" style={{ color: "var(--steel-blue)" }}>
               $6,100.00
             </div>
             <div className="flex items-center gap-1 mt-1">
-              <TrendingUp className="size-3" style={{ color: "#8CE77F" }} />
-              <span className="text-xs" style={{ color: "#8CE77F" }}>
+              <TrendingUp className="size-3" style={{ color: "var(--steel-blue)" }} />
+              <span className="text-xs" style={{ color: "var(--steel-blue)" }}>
                 +3.2%
               </span>
               <span className="text-xs text-gray-600">from last month</span>
@@ -81,15 +81,15 @@ export function DashboardContent() {
             <CardTitle className="text-sm font-medium text-gray-700">
               Monthly Expenses
             </CardTitle>
-            <CreditCard className="size-4" style={{ color: "#F45D5D" }} />
+            <CreditCard className="size-4" style={{ color: "var(--dark-cyan)" }} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold" style={{ color: "#F45D5D" }}>
+            <div className="text-2xl font-bold" style={{ color: "var(--dark-cyan)" }}>
               $3,500.00
             </div>
             <div className="flex items-center gap-1 mt-1">
-              <TrendingDown className="size-3" style={{ color: "#F45D5D" }} />
-              <span className="text-xs" style={{ color: "#F45D5D" }}>
+              <TrendingDown className="size-3" style={{ color: "var(--dark-cyan)" }} />
+              <span className="text-xs" style={{ color: "var(--dark-cyan)" }}>
                 +8.1%
               </span>
               <span className="text-xs text-gray-600">from last month</span>
@@ -102,15 +102,15 @@ export function DashboardContent() {
             <CardTitle className="text-sm font-medium text-gray-700">
               Savings Goal
             </CardTitle>
-            <PiggyBank className="size-4" style={{ color: "var(--dusty-taupe)" }} />
+            <PiggyBank className="size-4" style={{ color: "var(--steel-blue)" }} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold" style={{ color: "var(--dusty-taupe)" }}>
+            <div className="text-2xl font-bold" style={{ color: "var(--steel-blue)" }}>
               $8,200.00
             </div>
             <div className="flex items-center gap-1 mt-1">
-              <Activity className="size-3" style={{ color: "var(--dusty-taupe)" }} />
-              <span className="text-xs" style={{ color: "var(--dusty-taupe)" }}>
+              <Activity className="size-3" style={{ color: "var(--steel-blue)" }} />
+              <span className="text-xs" style={{ color: "var(--steel-blue)" }}>
                 68%
               </span>
               <span className="text-xs text-gray-600">of $12,000 goal</span>
@@ -122,7 +122,7 @@ export function DashboardContent() {
       {/* Budget Progress */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base" style={{ color: "var(--mauve-bark)" }}>
+          <CardTitle className="text-base" style={{ color: "var(--charcoal-blue)" }}>
             Budget Progress
           </CardTitle>
           <CardDescription className="text-gray-600">Track your monthly spending limits</CardDescription>
@@ -156,7 +156,7 @@ export function DashboardContent() {
       {/* Placeholder for Transactions and Budgets tabs */}
       <Card>
         <CardHeader>
-          <CardTitle style={{ color: "var(--mauve-bark)" }}>More Content Coming Soon</CardTitle>
+          <CardTitle className="text-base" style={{ color: "var(--charcoal-blue)" }}>More Content Coming Soon</CardTitle>
           <CardDescription className="text-gray-600">
             Transactions, Budgets, and Loans tabs will be implemented next
           </CardDescription>

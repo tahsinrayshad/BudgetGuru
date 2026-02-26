@@ -1,13 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
+  /* CSS HEX */
+  --ink-black: #031716ff;
+  --dark-teal: #032f30ff;
+  --stormy-teal: #0a7075ff;
+  --dark-cyan: #0c969cff;
+  --steel-blue: #6ba3beff;
+  --charcoal-blue: #274d60ff;
+  
+  /* CSS HSL */
+  --ink-black-hsl: hsla(177, 77%, 5%, 1);
+  --dark-teal-hsl: hsla(181, 88%, 10%, 1);
+  --stormy-teal-hsl: hsla(183, 84%, 25%, 1);
+  --dark-cyan-hsl: hsla(183, 86%, 33%, 1);
+  --steel-blue-hsl: hsla(200, 39%, 58%, 1);
+  --charcoal-blue-hsl: hsla(200, 42%, 26%, 1);
+  
+  /* Legacy compatibility */
+  --background: #031716ff;
   --foreground: #ededed;
-  --dusty-mauve: #957186;
-  --pastel-petal: #d9b8c4;
-  --mauve-shadow: #703d57;
-  --deep-mocha: #402a2c;
-  --coffee-bean: #241715;
+  --dusty-mauve: #0a7075ff;
+  --pastel-petal: #6ba3beff;
+  --mauve-shadow: #0c969cff;
+  --deep-mocha: #274d60ff;
+  --coffee-bean: #031716ff;
+  --mauve-bark: #0a7075ff;
 }
 
 @theme inline {
@@ -19,7 +37,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: var(--ink-black);
     --foreground: #ededed;
   }
 }
@@ -33,25 +51,25 @@ body {
 /* Sonner Toast Customization */
 [data-sonner-toast][data-type="success"],
 .sonner-toast[data-type="success"] {
-  background-color: #D8F4D4 !important;
-  color: #118802 !important;
-  border-color: #118802 !important;
+  background-color: var(--dark-teal) !important;
+  color: var(--steel-blue) !important;
+  border-color: var(--stormy-teal) !important;
 }
 
 [data-sonner-toast][data-type="error"],
 .sonner-toast[data-type="error"] {
-  background-color: #F4D4D4 !important;
-  color: #F45D5D !important;
-  border-color: #F45D5D !important;
+  background-color: var(--charcoal-blue) !important;
+  color: var(--steel-blue) !important;
+  border-color: var(--dark-cyan) !important;
 }
 
 /* Alternative selectors for Sonner */
 [data-type="success"] {
-  background-color: #D8F4D4 !important;
-  color: #8CE77F !important;
+  background-color: var(--dark-teal) !important;
+  color: var(--steel-blue) !important;
 }
 
 [data-type="error"] {
-  background-color: #F4D4D4 !important;
-  color: #F45D5D !important;
+  background-color: var(--charcoal-blue) !important;
+  color: var(--steel-blue) !important;
 }

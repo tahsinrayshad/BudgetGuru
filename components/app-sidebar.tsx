@@ -177,7 +177,7 @@ export function AppSidebar({
                       <AvatarFallback
                         style={{
                           backgroundColor: "var(--almond-cream)",
-                          color: "var(--mauve-bark)",
+                          color: "var(--stormy-teal)",
                         }}
                         className="text-xs font-semibold"
                       >
