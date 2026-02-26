@@ -1,7 +1,8 @@
 "use client"
 
-import { Trash2 } from "lucide-react"
+import { Trash2, Loader } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 interface DeleteBudgetModalProps {
   isOpen: boolean
@@ -78,13 +79,14 @@ export function DeleteBudgetModal({
               type="button"
               onClick={onConfirm}
               disabled={isLoading}
-              className="flex-1"
+              className="flex-1 flex items-center justify-center gap-2"
               style={{
                 backgroundColor: "#ef4444",
                 color: "#FFFFFF",
                 border: "none",
               }}
             >
+              {isLoading && <Loader className="size-4 animate-spin" />}
               {isLoading ? "Deleting..." : "Delete"}
             </Button>
           </div>

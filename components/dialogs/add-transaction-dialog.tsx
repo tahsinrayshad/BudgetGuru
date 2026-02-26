@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { Loader } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { authUtils } from "@/lib/auth-client"
 import { API_CONFIG } from "@/lib/api-config"
 
@@ -413,13 +415,14 @@ export function AddTransactionDialog({ isOpen, onClose, onTransactionAdded }: Ad
             <Button
               type="submit"
               disabled={isLoading}
-              className="flex-1"
+              className="flex-1 flex items-center justify-center gap-2"
               style={{
                 backgroundColor: isLoading ? "var(--steel-blue)" : "var(--stormy-teal)",
                 color: "#FFFFFF",
                 border: "none",
               }}
             >
+              {isLoading && <Loader className="size-4 animate-spin" />}
               {isLoading ? "Adding..." : "Add Transaction"}
             </Button>
           </div>

@@ -1,10 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { X } from "lucide-react"
+import { X, Loader } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Calendar } from "@/components/ui/calendar"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { authUtils } from "@/lib/auth-client"
 import { toast } from "sonner"
 
@@ -276,13 +277,14 @@ export function EditBudgetDialog({
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="flex-1"
+                className="flex-1 flex items-center justify-center gap-2"
                 style={{
                   backgroundColor: "var(--stormy-teal)",
                   color: "#FFFFFF",
                   border: "none",
                 }}
               >
+                {isLoading && <Loader className="size-4 animate-spin" />}
                 {isLoading ? "Updating..." : "Update Budget"}
               </Button>
             </div>

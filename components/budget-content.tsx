@@ -9,6 +9,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { AddBudgetDialog } from "@/components/dialogs/add-budget-dialog"
 import { EditBudgetDialog } from "@/components/dialogs/edit-budget-dialog"
 import { DeleteBudgetModal } from "@/components/dialogs/delete-budget-modal"
@@ -287,8 +288,8 @@ export function BudgetsContent() {
 
   if (isLoading) {
     return (
-      <div className="text-center py-12" style={{ color: "var(--stormy-teal)" }}>
-        Loading budgets...
+      <div className="flex items-center justify-center min-h-96">
+        <LoadingSpinner size="lg" text="Loading budgets..." />
       </div>
     )
   }
@@ -375,7 +376,7 @@ export function BudgetsContent() {
             />
           </div>
           <p className="text-xs" style={{ color: "var(--stormy-teal)" }}>
-            ${monthlyBudgetSpent.toLocaleString()} of ${monthlyBudgetLimit.toLocaleString()}
+            {getCurrencySymbol(currency)}{monthlyBudgetSpent.toLocaleString()} of {getCurrencySymbol(currency)}{monthlyBudgetLimit.toLocaleString()}
           </p>
         </CardContent>
       </Card>

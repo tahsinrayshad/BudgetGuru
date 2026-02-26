@@ -14,6 +14,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { AddTransactionDialog } from "@/components/dialogs/add-transaction-dialog"
 import { EditTransactionDialog } from "@/components/dialogs/edit-transaction-dialog"
 import { DeleteConfirmationModal } from "@/components/dialogs/delete-confirmation-modal"
@@ -363,8 +364,8 @@ export function TransactionsContent() {
         </CardHeader>
         <CardContent className="p-4 sm:p-6 overflow-hidden">
           {isLoading ? (
-            <div className="text-center py-6" style={{ color: "var(--stormy-teal)" }}>
-              Loading transactions...
+            <div className="flex items-center justify-center min-h-64">
+              <LoadingSpinner size="md" text="Loading transactions..." />
             </div>
           ) : error ? (
             <div className="text-center py-6" style={{ color: "var(--dark-cyan)" }}>

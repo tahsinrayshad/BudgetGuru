@@ -17,7 +17,9 @@ export function Calendar({ value, onChange, minDate, maxDate }: CalendarProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     value ? new Date(value) : null
   )
+  const [showAbove, setShowAbove] = useState(false)
   const calendarRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -31,6 +33,31 @@ export function Calendar({ value, onChange, minDate, maxDate }: CalendarProps) {
       return () => document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [isOpen])
+
+  const calculatePosition = () => {
+    if (triggerRef.current) {
+      const triggerRect = triggerRef.current.getBoundingClientRect()
+      const calendarHeight = 380 // Approximate height of calendar + padding
+      const spaceBelow = window.innerHeight - triggerRect.bottom
+      const spaceAbove = triggerRect.top
+
+      // Show above if not enough space below and there's more space above
+      return spaceBelow < calendarHeight && spaceAbove > spaceBelow
+    }
+    return false
+  }
+
+  const handleToggleCalendar = () => {
+    if (!isOpen) {
+      // Opening the calendar - calculate position first
+      const shouldShowAbove = calculatePosition()
+      setShowAbove(shouldShowAbove)
+      setIsOpen(true)
+    } else {
+      // Closing the calendar
+      setIsOpen(false)
+    }
+  }
 
   useEffect(() => {
     if (value) {
@@ -105,7 +132,8 @@ export function Calendar({ value, onChange, minDate, maxDate }: CalendarProps) {
     <div className="relative w-full" ref={calendarRef}>
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        ref={triggerRef}
+        onClick={handleToggleCalendar}
         className="w-full px-3 py-2 rounded-md border text-left flex items-center justify-between transition-all hover:border-opacity-80"
         style={{
           borderColor: "var(--steel-blue)",
@@ -131,7 +159,9 @@ export function Calendar({ value, onChange, minDate, maxDate }: CalendarProps) {
 
       {isOpen && (
         <div
-          className="absolute top-full left-0 mt-2 w-80 p-4 rounded-lg border shadow-2xl z-50 animate-in fade-in zoom-in duration-200"
+          className={`absolute left-0 w-80 p-4 rounded-lg border shadow-2xl z-50 animate-in fade-in zoom-in duration-200 ${
+            showAbove ? "bottom-full mb-2" : "top-full mt-2"
+          }`}
           style={{
             backgroundColor: "#FFFFFF",
             borderColor: "var(--steel-blue)",

@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import {
   TrendingUp,
   TrendingDown,
@@ -10,6 +11,9 @@ import {
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
+import { getCurrencySymbol } from "@/lib/currency"
+import { authUtils } from "@/lib/auth-client"
+import { API_CONFIG } from "@/lib/api-config"
 
 const spendingData = [
   { month: "Jul", income: 5200, expenses: 3100 },
@@ -30,6 +34,34 @@ const budgets = [
 ]
 
 export function DashboardContent() {
+  const [currency, setCurrency] = useState("USD")
+
+  useEffect(() => {
+    const fetchUserPreferences = async () => {
+      try {
+        const token = authUtils.getToken()
+        if (!token) return
+
+        const response = await fetch(
+          `${window.location.origin}/api/auth/profile`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+
+        if (response.ok) {
+          const data = await response.json()
+          setCurrency(data.currency || "USD")
+        }
+      } catch (error) {
+        console.error("Failed to fetch user preferences:", error)
+      }
+    }
+
+    fetchUserPreferences()
+  }, [])
   return (
     <div className="flex flex-col gap-4 sm:gap-6">
       {/* Summary Cards */}
@@ -43,7 +75,7 @@ export function DashboardContent() {
           </CardHeader>
           <CardContent>
             <div className="text-xl sm:text-2xl font-bold" style={{ color: "var(--stormy-teal)" }}>
-              $24,563.00
+              {getCurrencySymbol(currency)}24,563.00
             </div>
             <div className="flex items-center gap-1 mt-1">
               <TrendingUp className="size-3" style={{ color: "var(--steel-blue)" }} />
@@ -64,7 +96,7 @@ export function DashboardContent() {
           </CardHeader>
           <CardContent>
             <div className="text-xl sm:text-2xl font-bold" style={{ color: "var(--steel-blue)" }}>
-              $6,100.00
+              {getCurrencySymbol(currency)}6,100.00
             </div>
             <div className="flex items-center gap-1 mt-1">
               <TrendingUp className="size-3" style={{ color: "var(--steel-blue)" }} />
@@ -85,7 +117,7 @@ export function DashboardContent() {
           </CardHeader>
           <CardContent>
             <div className="text-xl sm:text-2xl font-bold" style={{ color: "var(--dark-cyan)" }}>
-              $3,500.00
+              {getCurrencySymbol(currency)}3,500.00
             </div>
             <div className="flex items-center gap-1 mt-1">
               <TrendingDown className="size-3" style={{ color: "var(--dark-cyan)" }} />
@@ -106,7 +138,7 @@ export function DashboardContent() {
           </CardHeader>
           <CardContent>
             <div className="text-xl sm:text-2xl font-bold" style={{ color: "var(--steel-blue)" }}>
-              $8,200.00
+              {getCurrencySymbol(currency)}8,200.00
             </div>
             <div className="flex items-center gap-1 mt-1">
               <Activity className="size-3" style={{ color: "var(--steel-blue)" }} />
@@ -136,7 +168,7 @@ export function DashboardContent() {
                     {budget.name}
                   </span>
                   <span className="text-sm text-gray-600">
-                    ${budget.spent} / ${budget.total}
+                    {getCurrencySymbol(currency)}{budget.spent} / {getCurrencySymbol(currency)}{budget.total}
                   </span>
                 </div>
                 <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
