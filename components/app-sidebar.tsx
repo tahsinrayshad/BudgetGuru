@@ -148,8 +148,9 @@ export function AppSidebar({
                   >
                     <item.icon
                       className={cn(
-                        "size-4",
-                        activeTab === item.id && "text-primary"
+                        "size-6",
+                        activeTab === item.id && "text-primary",
+                        !isOpen && "mx-auto"
                       )}
                     />
                     <span className={!isOpen ? "hidden" : ""}>{item.title}</span>
