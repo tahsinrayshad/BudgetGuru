@@ -8,6 +8,7 @@ import {
   Wallet,
   HandCoins,
   LogOut,
+  Settings,
   ChevronUp,
 } from "lucide-react"
 import {
@@ -42,6 +43,7 @@ const navItems = [
   { title: "Transactions", icon: ArrowLeftRight, id: "transactions" },
   { title: "Budgets", icon: Wallet, id: "budgets" },
   { title: "Loans", icon: HandCoins, id: "loans" },
+  { title: "Settings", icon: Settings, id: "settings" },
 ]
 
 interface AppSidebarProps {
@@ -209,8 +211,12 @@ export function AppSidebar({
                     borderColor: "#fffbeb",
                   }}
                 >
-                  <DropdownMenuItem className="text-gray-700 hover:bg-opacity-75">Profile Settings</DropdownMenuItem>
-                  <DropdownMenuItem className="text-gray-700 hover:bg-opacity-75">Notifications</DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => onTabChange("settings")}
+                    className="text-gray-700 hover:bg-opacity-75 cursor-pointer"
+                  >
+                    Settings
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator style={{ backgroundColor: "#f3e8d8" }} />
                   <DropdownMenuItem
                     onClick={handleLogout}

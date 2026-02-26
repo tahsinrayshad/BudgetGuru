@@ -15,16 +15,19 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  username  String   @unique
-  name      String?
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  budgets   Budget[]
-  loans     Loan[]
-  transactions Transaction[]
+  id                     String   @id @default(uuid())
+  email                  String   @unique
+  username               String   @unique
+  name                   String?
+  password               String
+  currency               String   @default("USD")
+  dateFormat             String   @default("MM/DD/YYYY")
+  notificationsEnabled   Boolean  @default(true)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  budgets                Budget[]
+  loans                  Loan[]
+  transactions           Transaction[]
 }
 
 model Budget {

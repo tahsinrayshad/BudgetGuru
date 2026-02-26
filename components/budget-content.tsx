@@ -14,6 +14,7 @@ import { EditBudgetDialog } from "@/components/dialogs/edit-budget-dialog"
 import { DeleteBudgetModal } from "@/components/dialogs/delete-budget-modal"
 import { authUtils } from "@/lib/auth-client"
 import { API_CONFIG } from "@/lib/api-config"
+import { getCurrencySymbol } from "@/lib/currency"
 import { toast } from "sonner"
 
 interface ApiBudget {
@@ -143,10 +144,36 @@ export function BudgetsContent() {
   const [isDeleteBudgetModalOpen, setIsDeleteBudgetModalOpen] = useState(false)
   const [selectedBudgetId, setSelectedBudgetId] = useState<string>("")
   const [isDeletingBudget, setIsDeletingBudget] = useState(false)
+  const [currency, setCurrency] = useState<string>("USD")
 
   useEffect(() => {
+    fetchUserPreferences()
     fetchBudgets()
   }, [])
+
+  const fetchUserPreferences = async () => {
+    try {
+      const token = authUtils.getToken()
+      if (!token) return
+
+      const response = await fetch(
+        `${window.location.origin}/api/auth/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      if (response.ok) {
+        const data = await response.json()
+        setCurrency(data.currency || "USD")
+      }
+    } catch (error) {
+      console.error("Error fetching user preferences:", error)
+      setCurrency("USD")
+    }
+  }
 
   const fetchBudgets = async () => {
     try {
@@ -278,7 +305,7 @@ export function BudgetsContent() {
           </CardHeader>
           <CardContent>
             <span className="text-2xl font-bold" style={{ color: "var(--charcoal-blue)" }}>
-              ${monthlyBudgetLimit.toLocaleString()}
+              {getCurrencySymbol(currency)}{monthlyBudgetLimit.toLocaleString()}
             </span>
           </CardContent>
         </Card>
@@ -290,7 +317,7 @@ export function BudgetsContent() {
           </CardHeader>
           <CardContent>
             <span className="text-2xl font-bold" style={{ color: "var(--charcoal-blue)" }}>
-              ${monthlyBudgetSpent.toLocaleString()}
+              {getCurrencySymbol(currency)}{monthlyBudgetSpent.toLocaleString()}
             </span>
           </CardContent>
         </Card>
@@ -305,7 +332,7 @@ export function BudgetsContent() {
               className="text-2xl font-bold"
               style={{ color: monthlyRemaining >= 0 ? "#10b981" : "#ef4444" }}
             >
-              ${Math.abs(monthlyRemaining).toLocaleString()}
+              {getCurrencySymbol(currency)}{Math.abs(monthlyRemaining).toLocaleString()}
             </span>
           </CardContent>
         </Card>
@@ -386,7 +413,7 @@ export function BudgetsContent() {
                           {budget.category}
                         </CardTitle>
                         <CardDescription className="text-xs">
-                          ${budget.spent} of ${budget.limit}
+                          {getCurrencySymbol(currency)}{budget.spent} of {getCurrencySymbol(currency)}{budget.limit}
                         </CardDescription>
                       </div>
                     </div>
@@ -411,8 +438,8 @@ export function BudgetsContent() {
                   
                   <p className="text-xs" style={{ color: "var(--stormy-teal)" }}>
                     {budgetRemaining > 0
-                      ? `$${budgetRemaining} remaining`
-                      : `$${Math.abs(budgetRemaining)} over budget`}
+                      ? `${getCurrencySymbol(currency)}${budgetRemaining} remaining`
+                      : `${getCurrencySymbol(currency)}${Math.abs(budgetRemaining)} over budget`}
                   </p>
 
                   {/* Budget Period */}

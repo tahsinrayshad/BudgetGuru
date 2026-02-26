@@ -19,6 +19,7 @@ import { EditTransactionDialog } from "@/components/dialogs/edit-transaction-dia
 import { DeleteConfirmationModal } from "@/components/dialogs/delete-confirmation-modal"
 import { authUtils } from "@/lib/auth-client"
 import { API_CONFIG } from "@/lib/api-config"
+import { getCurrencySymbol } from "@/lib/currency"
 import { toast } from "sonner"
 
 interface ApiTransaction {
@@ -58,11 +59,37 @@ export function TransactionsContent() {
   const [transactionToDelete, setTransactionToDelete] = useState<string>("")
   const [isDeletingTransaction, setIsDeletingTransaction] = useState(false)
   const [categories, setCategories] = useState<string[]>(["All"])
+  const [currency, setCurrency] = useState<string>("USD")
 
   useEffect(() => {
+    fetchUserPreferences()
     fetchTransactions()
     fetchCategories()
   }, [])
+
+  const fetchUserPreferences = async () => {
+    try {
+      const token = authUtils.getToken()
+      if (!token) return
+
+      const response = await fetch(
+        `${window.location.origin}/api/auth/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      if (response.ok) {
+        const data = await response.json()
+        setCurrency(data.currency || "USD")
+      }
+    } catch (error) {
+      console.error("Error fetching user preferences:", error)
+      setCurrency("USD")
+    }
+  }
 
   const fetchCategories = async () => {
     try {
@@ -208,7 +235,7 @@ export function TransactionsContent() {
                 <ArrowDownLeft className="size-4" style={{ color: "#FFFFFF" }} />
               </div>
               <span className="text-2xl font-bold" style={{ color: "var(--charcoal-blue)" }}>
-                ${totalInflow.toFixed(2)}
+                {getCurrencySymbol(currency)}{totalInflow.toFixed(2)}
               </span>
             </div>
           </CardContent>
@@ -225,7 +252,7 @@ export function TransactionsContent() {
                 <ArrowUpRight className="size-4" style={{ color: "#FFFFFF" }} />
               </div>
               <span className="text-2xl font-bold" style={{ color: "var(--charcoal-blue)" }}>
-                ${totalOutflow.toFixed(2)}
+                {getCurrencySymbol(currency)}{totalOutflow.toFixed(2)}
               </span>
             </div>
           </CardContent>
@@ -400,7 +427,7 @@ export function TransactionsContent() {
                           color: tx.type === "income" ? "#10b981" : tx.type === "expense" ? "#ef4444" : "#f59e0b"
                         }}
                       >
-                        {tx.type === "income" ? "+" : "-"}${Math.abs(tx.amount).toFixed(2)}
+                        {tx.type === "income" ? "+" : "-"}{getCurrencySymbol(currency)}{Math.abs(tx.amount).toFixed(2)}
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">

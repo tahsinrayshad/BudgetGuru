@@ -8,6 +8,7 @@ import { TransactionsContent } from "@/components/transactions-content"
 import { BudgetsContent } from "@/components/budget-content"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { authUtils } from "@/lib/auth-client"
+import Settings from "@/app/dashboard/settings/page"
 
 export default function Dashboard() {
   const router = useRouter()
@@ -76,12 +77,14 @@ export default function Dashboard() {
                 {activeTab === "transactions" && "Transactions"}
                 {activeTab === "budgets" && "Budgets"}
                 {activeTab === "loans" && "Loans"}
+                {activeTab === "settings" && "Settings"}
               </h1>
               <p className="text-gray-600 mt-1">
                 {activeTab === "dashboard" && "Welcome back! Here's your financial overview."}
                 {activeTab === "transactions" && "Manage and track all your transactions."}
                 {activeTab === "budgets" && "Set and monitor your spending budgets."}
                 {activeTab === "loans" && "Track and manage your loans."}
+                {activeTab === "settings" && "Manage your account settings and preferences"}
               </p>
             </div>
 
@@ -94,6 +97,7 @@ export default function Dashboard() {
                 Loans content coming soon...
               </div>
             )}
+            {activeTab === "settings" && <Settings />}
         </div>
       </div>
       </div>
