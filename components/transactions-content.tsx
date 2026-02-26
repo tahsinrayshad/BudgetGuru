@@ -247,14 +247,14 @@ export function TransactionsContent() {
       {/* Transactions Table */}
       <Card className="overflow-hidden">
         <CardHeader className="p-4 sm:p-6">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
               <CardTitle className="text-base" style={{ color: "var(--charcoal-blue)" }}>
                 Recent Transactions
               </CardTitle>
               <CardDescription>All account activity</CardDescription>
             </div>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto">
               <div className="relative flex-1 sm:flex-none">
                 <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2" style={{ color: "var(--stormy-teal)" }} />
                 <Input 
