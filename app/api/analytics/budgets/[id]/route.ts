@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getBudgetPerformance } from "@/services/budget.service";
 import { verifyToken, getTokenFromHeader } from "@/lib/jwt";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
