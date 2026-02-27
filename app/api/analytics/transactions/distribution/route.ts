@@ -3,6 +3,8 @@ import { getSpendingDistribution } from "@/services/analytics.service";
 import { verifyToken, getTokenFromHeader } from "@/lib/jwt";
 import { AnalyticsPeriod } from "@/types/analytics";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     // Verify authentication
