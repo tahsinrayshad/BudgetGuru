@@ -6,6 +6,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { DashboardContent } from "@/components/dashboard-content"
 import { TransactionsContent } from "@/components/transactions-content"
 import { BudgetsContent } from "@/components/budget-content"
+import { LoansContent } from "@/components/loans-content"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { authUtils } from "@/lib/auth-client"
 import Settings from "@/app/dashboard/settings/page"
@@ -92,11 +93,7 @@ export default function Dashboard() {
             {activeTab === "dashboard" && <DashboardContent />}
             {activeTab === "transactions" && <TransactionsContent />}
             {activeTab === "budgets" && <BudgetsContent />}
-            {activeTab === "loans" && (
-              <div className="bg-amber-50 rounded-lg p-8 text-center text-gray-600">
-                Loans content coming soon...
-              </div>
-            )}
+            {activeTab === "loans" && <LoansContent />}
             {activeTab === "settings" && <Settings />}
         </div>
       </div>

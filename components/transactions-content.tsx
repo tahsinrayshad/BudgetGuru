@@ -201,8 +201,8 @@ export function TransactionsContent() {
 
   const filteredTransactions = transactions.filter((tx) => {
     const matchesSearch =
-      tx.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      tx.category.toLowerCase().includes(searchTerm.toLowerCase())
+      (tx.description || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (tx.category || "").toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === "All" || tx.category === selectedCategory
     return matchesSearch && matchesCategory
   })
